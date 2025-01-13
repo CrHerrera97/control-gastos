@@ -28,7 +28,7 @@ const getCategoriaIngreso = async (req,res) => {
 
 const crearCategoriaIngreso = async (req,res = response) => {
 
-    const nombre = req.body.nombre.toUpperCase();;
+    const nombre = req.body.nombre.toUpperCase();
     const descripcion = req.body.descripcion;
 
     const categoriaIngresoDb = await CategoriaIngreso.findOne({nombre})
@@ -54,7 +54,7 @@ const crearCategoriaIngreso = async (req,res = response) => {
 const putCategoriaIngreso = async (req,res) => {
     const { id } = req.params;
 
-    const nombre = req.body.nombre;
+    const nombre = req.body.nombre.toUpperCase();
     const descripcion = req.body.descripcion;
     const estado = req.body.estado;
 

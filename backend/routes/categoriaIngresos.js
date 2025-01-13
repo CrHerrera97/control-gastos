@@ -25,7 +25,10 @@ router.post('/',[
     validarCampos
 ], crearCategoriaIngreso)
 
-router.put('/:id', putCategoriaIngreso)
+router.put('/:id',[
+    check('nombre','el nombre es obligatorio').not().isEmpty(),
+    validarCampos
+],putCategoriaIngreso)
 
 router.delete('/:id', deleteCategoriaIngreso)
 
