@@ -15,14 +15,29 @@ const getCategoriaIngreso = async (req,res) => {
     const { id } = req.params;
 
     const categoriaIngreso = await CategoriaIngreso.findById(id)
+
+    if(!categoriaIngreso){
+        return res.status(400).json({
+            msg: `La categoria ${id} no existe`
+        })
+    }
     res.json({
         categoriaIngreso
     })
 }
 
 const crearCategoriaIngreso = async (req,res = response) => {
-    const nombre = req.body.nombre;
+
+    const nombre = req.body.nombre.toUpperCase();;
     const descripcion = req.body.descripcion;
+
+    const categoriaIngresoDb = await CategoriaIngreso.findOne({nombre})
+
+    if(categoriaIngresoDb){
+        return res.status(400).json({
+            msg: `La categoria ${categoriaIngresoDb.nombre} ya existe`
+        })
+    }
 
     const data = {
         nombre,
@@ -41,11 +56,11 @@ const putCategoriaIngreso = async (req,res) => {
 
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
-
+    const estado = req.body.estado;
 
     const categoriaIngreso = await CategoriaIngreso.findByIdAndUpdate(
         id,
-        { $set: { nombre, descripcion }}
+        { $set: { nombre, descripcion, estado }}
     )
 
     res.json({
