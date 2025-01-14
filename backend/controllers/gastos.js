@@ -117,7 +117,6 @@ const obtenerGastoPorCategoria = async (req, res = response) => {
             console.log("No se encontraron gastos para este mes y año.");
         }
 
-        // Enviar la respuesta con los datos agregados
         res.json(reporte);
     } catch (error) {
         console.error("Error:", error);
@@ -126,15 +125,34 @@ const obtenerGastoPorCategoria = async (req, res = response) => {
 };
 
 
-
 const obtenerGastoPorSubCategoria = async (req, res) => {
+    const { mes, año } = req.query;
     try {
+
+        const mesInt = parseInt(mes, 10);
+        const añoInt = parseInt(año, 10);
+
+        if (isNaN(mesInt) || isNaN(añoInt)) {
+            return res.status(400).json({ msg: "Mes o año no válidos" });
+        }
+        const fechaInicio = new Date(añoInt, mesInt - 1, 1); // Primer día del mes
+        const fechaFin = new Date(añoInt, mesInt, 0);
+        
+
         const reporte = await Gasto.aggregate([
+            {
+                $match: {
+                    creadoEn: {
+                        $gte: fechaInicio,  
+                        $lte: fechaFin     
+                    }
+                }
+            },
             {
                 $group: {
                     _id: "$subCategoria", 
                     totalGastos: { $sum: "$valor" },
-                    cantidad: { $count: {} }
+                    cantidad: { $sum: 1}
                 }
             },
             {
