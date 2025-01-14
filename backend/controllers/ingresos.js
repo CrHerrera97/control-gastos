@@ -16,15 +16,62 @@ const getIngresos = async (req,res = response) => {
         select: '-descripcion -estado -creadoEn -_id -__v'
     })
 
+    /*
+    const id = ingresos[0]._id.toString();
+    const nombre = ingresos[0].categoria.nombre;
+    const valor = ingresos[0].valor;
+    const creado = ingresos[0].creadoEn;
+
+    const newData = {
+        id,
+        nombre,
+        valor,
+        creado
+    }
+
+    console.log(newData);
+
+    */
+
+
     res.status(200).json({
         ingresos
     })
 }
 
-const getIngreso = (req,res) => {
+const getIngreso = async (req,res) => {
     res.json({
-        msg: 'Get by id'
-    });
+        msg: 'get x id ingreso'
+    })
+}
+
+const getIngresosTotal = async (req, res) => {
+    try {
+        const sumTotal = await Ingreso.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalValor: { $sum: "$valor" }
+                }
+            }
+        ]);
+
+        if (sumTotal.length > 0) {
+            const total = sumTotal[0].totalValor;
+            res.status(200).json({
+                valorTotal: total
+            });
+        } else {
+            res.status(200).json({
+                valorTotal: 0
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            msg: 'Error',
+            error: err.message
+        });
+    }
 }
 
 const crearIngreso = async (req,res) => {
@@ -53,4 +100,4 @@ const deleteIngreso = (req,res) => {
     });
 }
 
-module.exports = { getIngresos, crearIngreso, getIngreso, putIngreso, deleteIngreso }
+module.exports = { getIngresos, crearIngreso, getIngreso, putIngreso, deleteIngreso, getIngresosTotal }

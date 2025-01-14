@@ -12,6 +12,9 @@ class Server {
         this.apiPaths = {
             ingresos : '/api/ingresos',
             categoriaIngresos : '/api/categoriaIngresos',
+            gastos: '/api/gastos',
+            categoriaGastos: '/api/categoriaGastos',
+            subCategoriaGastos: '/api/subCategoriaGastos'
         }
 
         // Connect Db
@@ -43,6 +46,9 @@ class Server {
     routes(){
         this.app.use(this.apiPaths.ingresos, require('../routes/ingresos'));
         this.app.use(this.apiPaths.categoriaIngresos, require('../routes/categoriaIngresos'));
+        this.app.use(this.apiPaths.gastos, require('../routes/gastos'));
+        this.app.use(this.apiPaths.categoriaGastos, require('../routes/categoriaGastos'));
+        this.app.use(this.apiPaths.subCategoriaGastos, require('../routes/subCategoriaGastos'));
     }
 }
 
