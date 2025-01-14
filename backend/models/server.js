@@ -11,7 +11,7 @@ class Server {
         this.port = process.env.PORT;
         this.apiPaths = {
             ingresos : '/api/ingresos',
-            categoriaIngresos : '/api/categoriaIngresos',
+            categoriasIngresos : '/api/categorias-ingresos',
             gastos: '/api/gastos',
             categoriaGastos: '/api/categoriaGastos',
             subCategoriaGastos: '/api/subCategoriaGastos'
@@ -19,7 +19,6 @@ class Server {
 
         // Connect Db
         this.conectarDb();
-
         this.middlewares();
         this.routes();
     }
@@ -29,7 +28,7 @@ class Server {
     }
 
     middlewares(){
-        // Cours
+        // Cors
         this.app.use(cors());
 
         // Lectura body
@@ -45,7 +44,7 @@ class Server {
 
     routes(){
         this.app.use(this.apiPaths.ingresos, require('../routes/ingresos'));
-        this.app.use(this.apiPaths.categoriaIngresos, require('../routes/categoriaIngresos'));
+        this.app.use(this.apiPaths.categoriasIngresos, require('../routes/categoriaIngresos'));
         this.app.use(this.apiPaths.gastos, require('../routes/gastos'));
         this.app.use(this.apiPaths.categoriaGastos, require('../routes/categoriaGastos'));
         this.app.use(this.apiPaths.subCategoriaGastos, require('../routes/subCategoriaGastos'));

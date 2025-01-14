@@ -204,9 +204,6 @@ const crearGasto = async (req,res = response) => {
 
     res.status(201).json(crearGasto);
     */
-   res.json({
-    gastos
-   })
 }
 
 const putCategoriaGasto = async (req,res) => {

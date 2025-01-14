@@ -4,35 +4,11 @@ const { response } = require('express');
 const Ingreso = require('../models/ingreso')
 
 const getIngresos = async (req,res = response) => {
-    /*
-    const [ingresos] = await Promise.all([
-        Ingreso.find()
-            .populate('categoria')
-    ])
-    */
 
     const ingresos = await Ingreso.find().populate({
         path: 'categoria',
         select: '-descripcion -estado -creadoEn -_id -__v'
     })
-
-    /*
-    const id = ingresos[0]._id.toString();
-    const nombre = ingresos[0].categoria.nombre;
-    const valor = ingresos[0].valor;
-    const creado = ingresos[0].creadoEn;
-
-    const newData = {
-        id,
-        nombre,
-        valor,
-        creado
-    }
-
-    console.log(newData);
-
-    */
-
 
     res.status(200).json({
         ingresos
@@ -40,12 +16,18 @@ const getIngresos = async (req,res = response) => {
 }
 
 const getIngreso = async (req,res) => {
-    res.json({
-        msg: 'get x id ingreso'
+
+    const { id } = req.params;
+
+    const ingreso = await Ingreso.findById(id)
+
+    res.status(200).json({
+        ingreso
     })
 }
 
 const getIngresosTotal = async (req, res) => {
+
     try {
         const sumTotal = await Ingreso.aggregate([
             {
@@ -88,10 +70,23 @@ const crearIngreso = async (req,res) => {
 
 }
 
-const putIngreso = (req,res) => {
-    res.json({
-        msg: 'Put'
-    });
+const putIngreso = async (req,res) => {
+
+    const { id } = req.params;
+
+    const categoria = req.body.categoria;
+    const valor = req.body.valor;
+
+    console.log(categoria)
+    console.log(valor)
+    console.log(id)
+
+    const actualizarIngreso = await Ingreso.findByIdAndUpdate(
+        id,
+        { $set: { categoria, valor }}
+    )
+
+    res.status(200).json(actualizarIngreso)
 }
 
 const deleteIngreso = (req,res) => {
