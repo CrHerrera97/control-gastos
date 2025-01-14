@@ -67,6 +67,92 @@ const getGasto = async (req,res) => {
     })
 }
 
+// aqui van como los reportes de los gastos
+
+const obtenerGastoPorCategoria = async (req, res = response) => {
+    const { mes, año } = req.query;
+    try {
+        const mesInt = parseInt(mes, 10);
+        const añoInt = parseInt(año, 10);
+
+        if (isNaN(mesInt) || isNaN(añoInt)) {
+            return res.status(400).json({ msg: "Mes o año no válidos" });
+        }
+
+        // Generar las fechas, ajustando el mes (restar 1 ya que el mes en JavaScript va de 0 a 11)
+        const fechaInicio = new Date(añoInt, mesInt - 1, 1); // Primer día del mes
+        const fechaFin = new Date(añoInt, mesInt, 0); // Último día del mes
+
+        // Ejecutar la agregación
+        const reporte = await Gasto.aggregate([
+            {
+                $match: {
+                    creadoEn: {
+                        $gte: fechaInicio,  
+                        $lt: fechaFin     
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$categoria",  // Agrupar por categoría
+                    totalGastos: { $sum: "$valor" },  // Sumar los valores
+                    cantidad: { $sum: 1 }  // Contar el número de gastos
+                }
+            },
+            {
+                $lookup: {
+                    from: "categoriagastos", 
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "categoriaDetalles"
+                }
+            },
+            {
+                $unwind: "$categoriaDetalles"  
+            }
+        ]);
+
+        if (!reporte.length) {
+            console.log("No se encontraron gastos para este mes y año.");
+        }
+
+        // Enviar la respuesta con los datos agregados
+        res.json(reporte);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ msg: "Error al obtener el reporte por categoría" });
+    }
+};
+
+
+
+const obtenerGastoPorSubCategoria = async (req, res) => {
+    try {
+        const reporte = await Gasto.aggregate([
+            {
+                $group: {
+                    _id: "$subCategoria", 
+                    totalGastos: { $sum: "$valor" },
+                    cantidad: { $count: {} }
+                }
+            },
+            {
+                $lookup: {
+                    from: "subcategoriagastos", 
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "subcategoriaDetalles"
+                }
+            },
+            { $unwind: "$subcategoriaDetalles" }
+        ])
+        res.json(reporte);
+    } catch (error) {
+        
+    }
+}
+
 const crearGasto = async (req,res = response) => {
 
     /*
@@ -139,4 +225,4 @@ const deleteCategoriaGasto = async (req,res) => {
 
 }
 
-module.exports = { getGastos, getGasto, crearGasto, getSaldo }
+module.exports = { getGastos, getGasto, crearGasto, getSaldo, obtenerGastoPorCategoria, obtenerGastoPorSubCategoria }
