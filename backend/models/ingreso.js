@@ -10,6 +10,10 @@ const IngresoSchema = Schema({
         type: Number,
         required: true
     },
+    estado:{
+        type: Boolean,
+        default: true
+    },
     creadoEn: {
         type: Date,
         default: Date.now 

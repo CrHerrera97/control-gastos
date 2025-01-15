@@ -10,6 +10,10 @@ const SubCategoriaGastoSchema = Schema({
         ref: 'CategoriaGasto',
         required: true
     },
+    estado:{
+        type: Boolean,
+        default: true
+    },
     creadoEn: {
         type: Date,
         default: Date.now

@@ -85,10 +85,15 @@ const editarIngreso = async (req,res) => {
     res.status(200).json(actualizarIngreso)
 }
 
-const borrarIngreso = (req,res) => {
-    res.json({
-        msg: 'Delete'
-    });
+const borrarIngreso = async (req,res) => {
+    const { id } = req.params;
+    
+    const ingreso = await Ingreso.findByIdAndUpdate(
+        id,
+        { $set: { estado: "false" } }
+    )
+
+    res.status(200).json(ingreso);
 }
 
 module.exports = { obtenerIngresos, obtenerIngreso, obtenerIngresosTotales, crearIngreso, editarIngreso, borrarIngreso }

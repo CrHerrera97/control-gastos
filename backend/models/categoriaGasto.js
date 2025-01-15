@@ -5,6 +5,10 @@ const CategoriaGastoSchema = Schema({
         type: String,
         required: true
     },
+    estado:{
+        type: Boolean,
+        default: true
+    },
     creadoEn: {
         type: Date,
         default: Date.now
