@@ -1,20 +1,20 @@
 const { Router } = require('express');
 
-const { getIngresos, crearIngreso, getIngreso, putIngreso, deleteIngreso, getIngresosTotal } = require('../controllers/ingresos')
+const { obtenerIngresos, obtenerIngreso, obtenerIngresosTotales, crearIngreso, editarIngreso, borrarIngreso  } = require('../controllers/ingresos')
 
 const router = Router();
 
-router.get('/', getIngresos)
+router.get('/', obtenerIngresos)
 
-router.get('/:id', getIngreso)
+router.get('/:id', obtenerIngreso)
 
-router.get('/total/amount', getIngresosTotal)
+router.get('/total/amount', obtenerIngresosTotales)
 
 router.post('/', crearIngreso)
 
-router.put('/:id', putIngreso)
+router.put('/:id', editarIngreso)
 
-router.delete('/:id', deleteIngreso)
+router.delete('/:id', borrarIngreso)
 
 
 module.exports = router;

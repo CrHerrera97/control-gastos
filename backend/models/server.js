@@ -12,9 +12,9 @@ class Server {
         this.apiPaths = {
             ingresos : '/api/ingresos',
             categoriasIngresos : '/api/categorias-ingresos',
-            gastos: '/api/gastos',
-            categoriaGastos: '/api/categoriaGastos',
-            subCategoriaGastos: '/api/subCategoriaGastos'
+            gastos : '/api/gastos',
+            categoriaGastos : '/api/categoria-gastos',
+            subCategoriaGastos : '/api/sub-categoria-gastos'
         }
 
         // Connect Db
@@ -32,8 +32,7 @@ class Server {
         this.app.use(cors());
 
         // Lectura body
-
-        this.app.use(express.json())
+        this.app.use(express.json());
     }
 
     listen(){

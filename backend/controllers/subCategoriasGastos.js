@@ -3,26 +3,26 @@ const { response } = require('express');
 const SubCategoriaGasto = require('../models/subCategoriaGasto');
 
 
-const getSubCategoriaGastos = async (req,res) => {
-    const categoriasGasto = await SubCategoriaGasto.find();
+const obtenerSubCategoriasGasto = async (req,res) => {
+    const subCategoriasGasto = await SubCategoriaGasto.find();
 
     res.status(200).json({
-        categoriasGasto
+        subCategoriasGasto
     })
 }
 
-const getSubCategoriaGasto = async (req,res) => {
+const obtenerSubCategoriaGasto = async (req,res) => {
     const { id } = req.params;
 
-    const categoriaGasto = await SubCategoriaGasto.findById(id)
+    const subCategoriaGasto = await SubCategoriaGasto.findById(id)
 
-    if(!categoriaGasto){
+    if(!subCategoriaGasto){
         return res.status(400).json({
-            msg: `La categoria ${id} no existe`
+            msg: `La sub categoria ${id} no existe`
         })
     }
-    res.json({
-        categoriaGasto
+    res.status(200).json({
+        subCategoriaGasto
     })
 }
 
@@ -31,11 +31,11 @@ const crearSubCategoriaGasto = async (req,res = response) => {
     const nombre = req.body.nombre.toUpperCase();
     const categoria = req.body.categoria;
 
-    const categoriaGastoDb = await SubCategoriaGasto.findOne({nombre})
+    const subCategoriaGastoDb = await SubCategoriaGasto.findOne({nombre})
 
-    if(categoriaGastoDb){
+    if(subCategoriaGastoDb){
         return res.status(400).json({
-            msg: `La categoria ${categoriaGastoDb.nombre} ya existe`
+            msg: `La sub categoria ${subCategoriaGastoDb.nombre} ya existe`
         })
     }
 
@@ -44,45 +44,43 @@ const crearSubCategoriaGasto = async (req,res = response) => {
         categoria
     }
 
-    const crearCategoriaGasto = await new SubCategoriaGasto(data)
+    const crearSubCategoriaGasto = new SubCategoriaGasto(data)
 
-    await crearCategoriaGasto.save();
+    await crearSubCategoriaGasto.save();
 
-    res.status(201).json(crearCategoriaGasto);
+    res.status(201).json(crearSubCategoriaGasto);
 }
 
-const putSubCategoriaGasto = async (req,res) => {
+const editarSubCategoriaGasto = async (req,res) => {
     const { id } = req.params;
 
     const nombre = req.body.nombre.toUpperCase();
     const descripcion = req.body.descripcion;
     const estado = req.body.estado;
 
-    const categoriaGasto = await SubCategoriaGasto.findByIdAndUpdate(
+    const subCategoriaGasto = await SubCategoriaGasto.findByIdAndUpdate(
         id,
-        { $set: { nombre, descripcion, estado }}
+        { $set: { nombre, descripcion, estado } }
     )
 
-    res.json({
-        categoriaGasto,
-        nombre,
-        id
+    res.status(200).json({
+        subCategoriaGasto
     })
 
 }
 
-const deleteSubCategoriaGasto = async (req,res) => {
+const borrarSubCategoriaGasto = async (req,res) => {
     const { id } = req.params;
 
-    const categoriaGasto = await SubCategoriaGasto.findByIdAndUpdate(
+    const subCategoriaGasto = await SubCategoriaGasto.findByIdAndUpdate(
         id,
-        { $set: {estado: "false"}}
+        { $set: {estado: "false" } }
     )
 
-    res.json({
-        categoriaGasto
+    res.status(200).json({
+        subCategoriaGasto
     })
 
 }
 
-module.exports = { getSubCategoriaGastos, crearSubCategoriaGasto, getSubCategoriaGasto, putSubCategoriaGasto, deleteSubCategoriaGasto }
+module.exports = { obtenerSubCategoriasGasto, obtenerSubCategoriaGasto, crearSubCategoriaGasto, editarSubCategoriaGasto, borrarSubCategoriaGasto }

@@ -3,7 +3,7 @@ const { response } = require('express');
 const CategoriaIngreso = require('../models/categoriaIngreso');
 
 
-const getCategoriasIngreso = async (req,res) => {
+const obtenerCategoriasIngreso = async (req,res) => {
     const categoriasIngreso = await CategoriaIngreso.find();
 
     res.status(200).json({
@@ -11,17 +11,12 @@ const getCategoriasIngreso = async (req,res) => {
     })
 }
 
-const getCategoriaIngreso = async (req,res) => {
+const obtenerCategoriaIngreso = async (req,res) => {
     const { id } = req.params;
 
     const categoriaIngreso = await CategoriaIngreso.findById(id)
 
-    if(!categoriaIngreso){
-        return res.status(400).json({
-            msg: `La categoria ${id} no existe`
-        })
-    }
-    res.json({
+    res.status(200).json({
         categoriaIngreso
     })
 }
@@ -35,7 +30,7 @@ const crearCategoriaIngreso = async (req,res = response) => {
 
     if(categoriaIngresoDb){
         return res.status(400).json({
-            msg: `La categoria ${categoriaIngresoDb.nombre} ya existe`
+            msg: `La categoria ingreso ${categoriaIngresoDb.nombre} ya existe`
         })
     }
 
@@ -44,14 +39,15 @@ const crearCategoriaIngreso = async (req,res = response) => {
         descripcion
     }
 
-    const crearCategoriaIngreso = await new CategoriaIngreso(data)
+    const crearCategoriaIngreso = new CategoriaIngreso(data)
 
     await crearCategoriaIngreso.save();
 
     res.status(201).json(crearCategoriaIngreso);
 }
 
-const putCategoriaIngreso = async (req,res) => {
+const editarCategoriaIngreso = async (req,res) => {
+
     const { id } = req.params;
 
     const nombre = req.body.nombre.toUpperCase();
@@ -60,29 +56,27 @@ const putCategoriaIngreso = async (req,res) => {
 
     const categoriaIngreso = await CategoriaIngreso.findByIdAndUpdate(
         id,
-        { $set: { nombre, descripcion, estado }}
+        { $set: { nombre, descripcion, estado } }
     )
 
-    res.json({
-        categoriaIngreso,
-        nombre,
-        id
-    })
-
-}
-
-const deleteCategoriaIngreso = async (req,res) => {
-    const { id } = req.params;
-
-    const categoriaIngreso = await CategoriaIngreso.findByIdAndUpdate(
-        id,
-        { $set: {estado: "false"}}
-    )
-
-    res.json({
+    res.status(200).json({
         categoriaIngreso
     })
 
 }
 
-module.exports = { getCategoriasIngreso, getCategoriaIngreso, crearCategoriaIngreso, putCategoriaIngreso, deleteCategoriaIngreso }
+const borrarCategoriaIngreso = async (req,res) => {
+    const { id } = req.params;
+
+    const categoriaIngreso = await CategoriaIngreso.findByIdAndUpdate(
+        id,
+        { $set: { estado: "false" } }
+    )
+
+    res.status(200).json({
+        categoriaIngreso
+    })
+
+}
+
+module.exports = { obtenerCategoriasIngreso, obtenerCategoriaIngreso, crearCategoriaIngreso, editarCategoriaIngreso, borrarCategoriaIngreso  }

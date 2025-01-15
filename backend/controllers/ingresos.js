@@ -3,7 +3,7 @@ const { response } = require('express');
 
 const Ingreso = require('../models/ingreso')
 
-const getIngresos = async (req,res = response) => {
+const obtenerIngresos = async (req,res = response) => {
 
     const ingresos = await Ingreso.find().populate({
         path: 'categoria',
@@ -15,7 +15,7 @@ const getIngresos = async (req,res = response) => {
     })
 }
 
-const getIngreso = async (req,res) => {
+const obtenerIngreso = async (req,res) => {
 
     const { id } = req.params;
 
@@ -26,7 +26,7 @@ const getIngreso = async (req,res) => {
     })
 }
 
-const getIngresosTotal = async (req, res) => {
+const obtenerIngresosTotales = async (req, res) => {
 
     try {
         const sumTotal = await Ingreso.aggregate([
@@ -37,7 +37,7 @@ const getIngresosTotal = async (req, res) => {
                 }
             }
         ]);
-
+        
         if (sumTotal.length > 0) {
             const total = sumTotal[0].totalValor;
             res.status(200).json({
@@ -70,16 +70,12 @@ const crearIngreso = async (req,res) => {
 
 }
 
-const putIngreso = async (req,res) => {
+const editarIngreso = async (req,res) => {
 
     const { id } = req.params;
 
     const categoria = req.body.categoria;
     const valor = req.body.valor;
-
-    console.log(categoria)
-    console.log(valor)
-    console.log(id)
 
     const actualizarIngreso = await Ingreso.findByIdAndUpdate(
         id,
@@ -89,10 +85,10 @@ const putIngreso = async (req,res) => {
     res.status(200).json(actualizarIngreso)
 }
 
-const deleteIngreso = (req,res) => {
+const borrarIngreso = (req,res) => {
     res.json({
         msg: 'Delete'
     });
 }
 
-module.exports = { getIngresos, crearIngreso, getIngreso, putIngreso, deleteIngreso, getIngresosTotal }
+module.exports = { obtenerIngresos, obtenerIngreso, obtenerIngresosTotales, crearIngreso, editarIngreso, borrarIngreso }

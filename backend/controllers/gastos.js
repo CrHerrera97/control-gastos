@@ -3,7 +3,7 @@ const { response } = require('express');
 const Gasto = require('../models/gasto');
 const Ingreso = require('../models/ingreso');
 
-const getGastos = async (req,res) => {
+const obtenerGastos = async (req,res) => {
     const gastos = await Gasto.find();
 
     res.status(200).json({
@@ -11,8 +11,24 @@ const getGastos = async (req,res) => {
     })
 }
 
-const getSaldo = async(req,res)=>{
+const obtenerGasto = async (req,res) => {
+    const { id } = req.params;
 
+    const gasto = await Gasto.findById(id)
+
+    if(!gasto){
+        return res.status(400).json({
+            msg: `El gasto ${ id } no existe`
+        })
+    }
+    res.status(200).json({
+        gasto
+    })
+}
+
+const obtenerSaldo = async(req,res)=>{
+
+    // Obtenemos todos los ingresos
     const ingresos = await Ingreso.aggregate([
         {
             $group: {
@@ -21,9 +37,11 @@ const getSaldo = async(req,res)=>{
             }
         }
     ])
+
     const totalIngresos = ingresos[0].totalValor;
     
     try {
+        // Obtener todos los gastos
         const sumTotal = await Gasto.aggregate([
             {
                 $group: {
@@ -35,9 +53,10 @@ const getSaldo = async(req,res)=>{
 
         if (sumTotal.length > 0) {
             const total = sumTotal[0].totalValor;
-            const result = totalIngresos-total
+            // Calculamos saldo
+            const saldo = totalIngresos-total
             res.status(200).json({
-                valorTotal: result
+                valorTotal: saldo
             });
         } else {
             res.status(200).json({
@@ -52,24 +71,53 @@ const getSaldo = async(req,res)=>{
     }
 }
 
-const getGasto = async (req,res) => {
-    const { id } = req.params;
+const crearGasto = async (req,res = response) => {
 
-    const gasto = await Gasto.findById(id)
+    // Recibir multiples gastos
 
-    if(!gasto){
-        return res.status(400).json({
-            msg: `El gasto ${id} no existe`
-        })
-    }
-    res.json({
-        gasto
+    const gastos = req.body
+
+    const arrayGastos = await Gasto.insertMany(gastos)
+
+    res.status(201).json({
+        arrayGastos
     })
 }
 
-// aqui van como los reportes de los gastos
+const editarCategoriaGasto = async (req,res) => {
+    const { id } = req.params;
 
-const obtenerGastoPorCategoria = async (req, res = response) => {
+    const nombre = req.body.nombre.toUpperCase();
+    const descripcion = req.body.descripcion;
+    const estado = req.body.estado;
+
+    const categoriaGasto = await Gasto.findByIdAndUpdate(
+        id,
+        { $set: { nombre, descripcion, estado }}
+    )
+
+    res.status(200).json({
+        categoriaGasto
+    })
+}
+
+const borrarCategoriaGasto = async (req,res) => {
+    const { id } = req.params;
+
+    const categoriaGasto = await Gasto.findByIdAndUpdate(
+        id,
+        { $set: { estado : "false" } }
+    )
+
+    res.status(200).json({
+        categoriaGasto
+    })
+}
+
+// Aqui van como los reportes de los gastos
+
+const obtenerGastosPorCategoria = async (req, res = response) => {
+
     const { mes, año } = req.query;
     try {
         const mesInt = parseInt(mes, 10);
@@ -117,15 +165,16 @@ const obtenerGastoPorCategoria = async (req, res = response) => {
             console.log("No se encontraron gastos para este mes y año.");
         }
 
-        res.json(reporte);
+        res.status(200).json(reporte);
+
     } catch (error) {
         console.error("Error:", error);
         res.status(500).json({ msg: "Error al obtener el reporte por categoría" });
     }
 };
 
+const obtenerGastosPorSubCategoria = async (req, res) => {
 
-const obtenerGastoPorSubCategoria = async (req, res) => {
     const { mes, año } = req.query;
     try {
 
@@ -138,7 +187,6 @@ const obtenerGastoPorSubCategoria = async (req, res) => {
         const fechaInicio = new Date(añoInt, mesInt - 1, 1); // Primer día del mes
         const fechaFin = new Date(añoInt, mesInt, 0);
         
-
         const reporte = await Gasto.aggregate([
             {
                 $match: {
@@ -165,79 +213,12 @@ const obtenerGastoPorSubCategoria = async (req, res) => {
             },
             { $unwind: "$subcategoriaDetalles" }
         ])
-        res.json(reporte);
+
+        res.status(200).json(reporte);
     } catch (error) {
-        
+        console.error("Error:", error);
+        res.status(500).json({ msg: "Error al obtener el reporte por Sub categoría" });
     }
 }
 
-const crearGasto = async (req,res = response) => {
-
-    /*
-    const categoria = req.body.categoria;
-    const subCategoria = req.body.subCategoria;
-    const valor = req.body.valor;
-    const descripcion = req.body.descripcion;
-    */
-
-    // Recibir multiples gastos
-
-    const gastos = req.body
-
-    const arrayGastos = await Gasto.insertMany(gastos)
-
-    res.status(201).json({
-        arrayGastos
-    })
-
-    /*
-    const data = {
-        categoria,
-        subCategoria,
-        descripcion,
-        valor
-    }
-
-    const crearGasto = await new Gasto(data)
-
-    await crearGasto.save();
-
-    res.status(201).json(crearGasto);
-    */
-}
-
-const putCategoriaGasto = async (req,res) => {
-    const { id } = req.params;
-
-    const nombre = req.body.nombre.toUpperCase();
-    const descripcion = req.body.descripcion;
-    const estado = req.body.estado;
-
-    const categoriaGasto = await Gasto.findByIdAndUpdate(
-        id,
-        { $set: { nombre, descripcion, estado }}
-    )
-
-    res.json({
-        categoriaGasto,
-        nombre,
-        id
-    })
-
-}
-
-const deleteCategoriaGasto = async (req,res) => {
-    const { id } = req.params;
-
-    const categoriaGasto = await Gasto.findByIdAndUpdate(
-        id,
-        { $set: {estado: "false"}}
-    )
-
-    res.json({
-        categoriaGasto
-    })
-
-}
-
-module.exports = { getGastos, getGasto, crearGasto, getSaldo, obtenerGastoPorCategoria, obtenerGastoPorSubCategoria }
+module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria }

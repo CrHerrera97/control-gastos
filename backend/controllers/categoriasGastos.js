@@ -3,7 +3,7 @@ const { response } = require('express');
 const CategoriaGasto = require('../models/categoriaGasto');
 
 
-const getCategoriaGastos = async (req,res) => {
+const obtenerCategoriasGasto = async (req,res) => {
     const categoriasGasto = await CategoriaGasto.find();
 
     res.status(200).json({
@@ -11,7 +11,7 @@ const getCategoriaGastos = async (req,res) => {
     })
 }
 
-const getCategoriaGasto = async (req,res) => {
+const obtenerCategoriaGasto = async (req,res) => {
     const { id } = req.params;
 
     const categoriaGasto = await CategoriaGasto.findById(id)
@@ -21,7 +21,7 @@ const getCategoriaGasto = async (req,res) => {
             msg: `La categoria ${id} no existe`
         })
     }
-    res.json({
+    res.status(200).json({
         categoriaGasto
     })
 }
@@ -44,14 +44,14 @@ const crearCategoriaGasto = async (req,res = response) => {
         descripcion
     }
 
-    const crearCategoriaGasto = await new CategoriaGasto(data)
+    const crearCategoriaGasto = new CategoriaGasto(data)
 
     await crearCategoriaGasto.save();
 
     res.status(201).json(crearCategoriaGasto);
 }
 
-const putCategoriaGasto = async (req,res) => {
+const editarCategoriaGasto = async (req,res) => {
     const { id } = req.params;
 
     const nombre = req.body.nombre.toUpperCase();
@@ -60,29 +60,26 @@ const putCategoriaGasto = async (req,res) => {
 
     const categoriaGasto = await CategoriaGasto.findByIdAndUpdate(
         id,
-        { $set: { nombre, descripcion, estado }}
+        { $set: { nombre, descripcion, estado } }
     )
 
-    res.json({
-        categoriaGasto,
-        nombre,
-        id
+    res.status(200).json({
+        categoriaGasto
     })
-
 }
 
-const deleteCategoriaGasto = async (req,res) => {
+const borrarCategoriaGasto = async (req,res) => {
     const { id } = req.params;
 
     const categoriaGasto = await CategoriaGasto.findByIdAndUpdate(
         id,
-        { $set: {estado: "false"}}
+        { $set: { estado : "false" } }
     )
 
-    res.json({
+    res.status(200).json({
         categoriaGasto
     })
 
 }
 
-module.exports = { getCategoriaGastos, crearCategoriaGasto, getCategoriaGasto, putCategoriaGasto, deleteCategoriaGasto }
+module.exports = { obtenerCategoriasGasto, obtenerCategoriaGasto, crearCategoriaGasto, editarCategoriaGasto, borrarCategoriaGasto }

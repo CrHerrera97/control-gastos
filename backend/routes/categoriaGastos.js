@@ -4,21 +4,19 @@ const { check } = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validar-campos')
 
-const { existeCategoriaPorId } = require('../helpers/db-validators')  
+const { existeCategoriaGastoPorId } = require('../helpers/db-validators')  
 
-const { getCategoriaGastos, crearCategoriaGasto, getCategoriaGasto, putCategoriaGasto, deleteCategoriaGasto } = require('../controllers/categoriasGastos')
+const { obtenerCategoriasGasto, obtenerCategoriaGasto, crearCategoriaGasto, editarCategoriaGasto, borrarCategoriaGasto } = require('../controllers/categoriasGastos')
 
 const router = Router();
 
-// TODO middlewares
-
-router.get('/', getCategoriaGastos)
+router.get('/', obtenerCategoriasGasto)
 
 router.get('/:id',[
-    check('id','no es un id valido').isMongoId(),
-    check('id').custom(existeCategoriaPorId),
+    check('id','No es un id valido').isMongoId(),
+    check('id').custom(existeCategoriaGastoPorId),
     validarCampos
-], getCategoriaGasto)
+], obtenerCategoriaGasto)
 
 router.post('/',[
     check('nombre','El nombre es obligatorio').not().isEmpty(),
@@ -26,11 +24,11 @@ router.post('/',[
 ], crearCategoriaGasto)
 
 router.put('/:id',[
-    check('nombre','el nombre es obligatorio').not().isEmpty(),
+    check('nombre','El nombre es obligatorio').not().isEmpty(),
     validarCampos
-],putCategoriaGasto)
+], editarCategoriaGasto)
 
-router.delete('/:id', deleteCategoriaGasto)
+router.delete('/:id', borrarCategoriaGasto)
 
 
 module.exports = router;

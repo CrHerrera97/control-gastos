@@ -1,21 +1,25 @@
 const { Router } = require('express');
 
-const { getGastos, getGasto, crearGasto, getSaldo, obtenerGastoPorCategoria, obtenerGastoPorSubCategoria } = require('../controllers/gastos')
+const { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria } = require('../controllers/gastos')
 
 const router = Router();
 
-router.get('/',getGastos)
+router.get('/', obtenerGastos);
 
-router.get('/:id',getGasto)
+router.get('/:id', obtenerGasto);
 
-router.get('/saldo/amount',getSaldo)
+router.get('/saldo/amount', obtenerSaldo);
+
+router.post('/', crearGasto);
+
+router.put('/:id', editarCategoriaGasto);
+
+router.delete('/:id', borrarCategoriaGasto);
 
 // Reportes 
 
-router.get('/reportes/obtenerGastoPorCategoria',obtenerGastoPorCategoria)
+router.get('/reportes/gastos/categoria', obtenerGastosPorCategoria);
 
-router.get('/reportes/obtenerGastoPorSubCategoria',obtenerGastoPorSubCategoria)
-
-router.post('/',crearGasto)
+router.get('/reportes/gastos/subcategoria', obtenerGastosPorSubCategoria);
 
 module.exports = router;
