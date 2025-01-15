@@ -4,7 +4,41 @@ const Gasto = require('../models/gasto');
 const Ingreso = require('../models/ingreso');
 
 const obtenerGastos = async (req,res) => {
-    const gastos = await Gasto.find();
+
+    // convertimos el string a booleano
+    const estado = req.query.estado === 'true';
+
+    const gastos = await Gasto.aggregate([
+        {
+            $match : { estado }
+        },
+        {
+            $lookup: {
+                from: "categoriagastos",
+                localField: "categoria",
+                foreignField: "_id",
+                as: "categoriaDetalles"
+            }
+        },
+        { $unwind: "$categoriaDetalles" },
+        {
+            $lookup: {
+                from: "subcategoriagastos",
+                localField: "subCategoria",
+                foreignField: "_id",
+                as: "subCategoriaDetalles"
+            }
+        },
+        { $unwind: "$subCategoriaDetalles" },
+        {
+            $project: {
+                _id: 1,
+                valor: 1,
+                "subCategoriaDetalles.nombre": 1,
+                "categoriaDetalles.nombre": 1
+            }
+        }
+    ])
 
     res.status(200).json({
         gastos
@@ -43,6 +77,9 @@ const obtenerSaldo = async(req,res)=>{
     try {
         // Obtener todos los gastos
         const sumTotal = await Gasto.aggregate([
+            {
+                $match: { estado: true }
+            },
             {
                 $group: {
                     _id: null,
@@ -211,7 +248,25 @@ const obtenerGastosPorSubCategoria = async (req, res) => {
                     as: "subcategoriaDetalles"
                 }
             },
-            { $unwind: "$subcategoriaDetalles" }
+            { $unwind: "$subcategoriaDetalles" },
+            {
+                $lookup: {
+                    from: "categoriagastos",
+                    localField: "subcategoriaDetalles.categoria",
+                    foreignField: "_id",
+                    as: "categoriaDetalles"
+                }
+            },
+            { $unwind: "$categoriaDetalles" },
+            {
+                $project: {
+                    _id: 1,
+                    totalGastos: 1,
+                    cantidad : 1,
+                    "subcategoriaDetalles.nombre": 1,
+                    "categoriaDetalles.nombre": 1
+                }
+            }
         ])
 
         res.status(200).json(reporte);
