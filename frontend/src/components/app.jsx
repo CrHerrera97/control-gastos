@@ -1,11 +1,15 @@
 import React from 'react';
-import IngresoList from './IngresoList'; 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import MyNavbar from './navbar';
+import AppRoutes from "./Routes";
 
 const App = () => {
   return (
-    <div>
-      <IngresoList /> {}
-    </div>
+    <Router>
+      <MyNavbar />
+      <AppRoutes />
+    </Router>
   );
 };
 
