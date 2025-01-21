@@ -7,7 +7,7 @@ const obtenerIngresos = async (req,res = response) => {
 
     const ingresos = await Ingreso.find().populate({
         path: 'categoria',
-        select: '-descripcion -estado -creadoEn -_id -__v'
+        select: '-descripcion -estado -creadoEn -__v'
     })
 
     res.status(200).json({
