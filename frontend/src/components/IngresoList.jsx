@@ -60,7 +60,19 @@ const IngresoList = () => {
 };
 
 const handleEdit = (id) => {
-  console.log(`Editar ingreso con id: ${id}`);
+  // Editar
+  const postOperaciones = {
+    method: "PUT",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      "categoria": "6787e441cf43c345fac3b12b",
+      "valor": 1000,
+    }),
+  }
+
+  fetch(`http://172.16.6.102:3000/api/ingresos/${id}`,postOperaciones)
+  .then((response) => response.json())
+  .then((respuesta) => console.log(respuesta))
 };
 
 const handleDelete = (id) => {

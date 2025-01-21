@@ -2,11 +2,15 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import IngresoList from "./IngresoList";
+import DashBoard from "./DashBoard";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<h3>Dashboard</h3>} />
+      <Route path="/" element={<div>
+        <h3>Dashboard</h3>
+        <DashBoard />
+      </div>} />
       <Route path="/ingresos" element={<div>
         <h3>Ingresos</h3>
         <IngresoList />
