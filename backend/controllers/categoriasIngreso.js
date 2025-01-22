@@ -4,7 +4,17 @@ const CategoriaIngreso = require('../models/categoriaIngreso');
 
 
 const obtenerCategoriasIngreso = async (req,res) => {
-    const categoriasIngreso = await CategoriaIngreso.find();
+
+    const { nombre } = req.query;
+
+    let categoriasIngreso;
+    if(!nombre){
+        categoriasIngreso = await CategoriaIngreso.find();
+    }else{
+        categoriasIngreso = await CategoriaIngreso.find({
+            nombre: { $regex: nombre, $options: 'i' }
+        });
+    }
 
     res.status(200).json({
         categoriasIngreso
