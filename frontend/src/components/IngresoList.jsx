@@ -137,6 +137,7 @@ const IngresoList = () => {
       const idIngreso = currentIngreso._id;
       const categoriaIngreso = currentIngreso.categoria._id;
       const valor = currentIngreso.valor;
+      const estado = currentIngreso.estado;
 
       const putOperaciones = {
         method: "PUT",
@@ -144,6 +145,7 @@ const IngresoList = () => {
         body: JSON.stringify({
           "categoria": categoriaIngreso,
           "valor": valor,
+          "estado": estado
         }),
       };
   
@@ -263,7 +265,7 @@ const IngresoList = () => {
                   type="checkbox"
                   label="Activo"
                   checked={currentIngreso.estado}
-                  disabled
+                  onChange={(e) => setCurrentIngreso({...currentIngreso, estado: e.target.checked })}
                 />
               </Form.Group>
             </Form>
