@@ -2,8 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Table, Spinner, Modal, Form, Button, ListGroup } from 'react-bootstrap';
 
 const IngresoList = () => {
+
+  // Url de la api y puerto
+  const url = import.meta.env.VITE_API_URL;
+  const port = import.meta.env.VITE_PORT;
+  // Estados leer ingresos
   const [ingresos, setIngresos] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Reutilizar el modal para ingresos y ediciones
+  const [ tipo, setTipo ] = useState(null);
   
   // Estado de busqueda de categorías
   const [filteredCategorias, setFilteredCategorias] = useState([]);
@@ -16,13 +24,19 @@ const IngresoList = () => {
   // Manejadores del modal
   const handleClose = () => setShow(false);
   const handleShow = (ingreso) => {
-    setCurrentIngreso(ingreso);
+    if(!ingreso){
+      setTipo('Ingreso')
+      setCurrentIngreso({ categoriaId : "", categoria: {}, valor: "", estado: true })
+    }else{
+      setTipo('Editar')
+      setCurrentIngreso(ingreso);
+    }
     setShow(true);
   };
 
   // Obtener ingresos
   useEffect(() => {
-    fetch('http://172.16.6.102:3000/api/ingresos')
+    fetch(`${url}:${port}/api/ingresos`)
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos);
@@ -33,11 +47,11 @@ const IngresoList = () => {
         setLoading(false);
       });
   }, []);
-  
+
   // Buscar categorías
   const fetchCategorias = async (searchTerm) => {
     try {
-      const response = await fetch(`http://172.16.6.102:3000/api/categorias-ingresos?nombre=${searchTerm}`);
+      const response = await fetch(`${url}:${port}/api/categorias-ingresos?nombre=${searchTerm}`);
       const data = await response.json();
       setFilteredCategorias(data.categoriasIngreso || []);
     } catch (error) {
@@ -80,43 +94,94 @@ const IngresoList = () => {
     );
   }
 
+  // Tener los registros actualizados
+  const fetchIngresos = () => {
+    fetch(`${url}:${port}/api/ingresos`)
+      .then((response) => response.json())
+      .then((data) => {
+        setIngresos(data.ingresos); // Actualizar el estado de los ingresos
+      })
+      .catch((error) => {
+        console.error('Error al obtener los ingresos:', error);
+      });
+  };
   // Guardar los cambios en el ingreso
   const handleSaveChanges = (currentIngreso) => {
-    const idIngreso = currentIngreso._id;
-    const categoriaIngreso = currentIngreso.categoria._id;
-    const valor = currentIngreso.valor;
 
-    const postOperaciones = {
-      method: "PUT",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        "categoria": categoriaIngreso,
-        "valor": valor,
-      }),
-    };
+    const categoriaId = currentIngreso.categoriaId
+    // Si la categoria id esta vacia significa que es un ingreso
+    if(categoriaId == ""){
+      // Datos post
+      const postOperaciones = {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          "categoria": currentIngreso.categoria._id,
+          "valor": currentIngreso.valor,
+        }),
+      };
+      try {
+        fetch(`${url}:${port}/api/ingresos`,postOperaciones)
+        .then((response)=>response.json)
+        .then((respuesta) =>{
+          if(respuesta){
+            fetchIngresos();
+            handleClose();
+          }
+        })
+        } catch (error) {
+          console.log(error)
+      }
+    }else{
+      // Editar
+      const idIngreso = currentIngreso._id;
+      const categoriaIngreso = currentIngreso.categoria._id;
+      const valor = currentIngreso.valor;
 
-    fetch(`http://172.16.6.102:3000/api/ingresos/${idIngreso}`, postOperaciones)
-      .then((response) => response.json())
-      .then((respuesta) => {
-        // Actualizar el estado de los ingresos sin necesidad de recargar la página
-        setIngresos((prevIngresos) =>
-          prevIngresos.map((ingreso) =>
-            ingreso._id === idIngreso
-              ? { ...ingreso, categoria: currentIngreso.categoria, valor: currentIngreso.valor }
-              : ingreso
-          )
-        );
-        handleClose();  // Cerrar el modal
-      })
-      .catch((error) => console.log(error));
+      const putOperaciones = {
+        method: "PUT",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          "categoria": categoriaIngreso,
+          "valor": valor,
+        }),
+      };
+  
+      fetch(`http://172.16.6.102:3000/api/ingresos/${idIngreso}`, putOperaciones)
+        .then((response) => response.json())
+        .then((respuesta) => {
+          // Actualizar el estado de los ingresos sin necesidad de recargar la página
+          fetchIngresos();
+          handleClose();  // Cerrar el modal
+        })
+        .catch((error) => console.log(error));
+    }
+
   };
 
   const handleDelete = (id) => {
-    console.log(`Eliminar ingreso con id: ${id._id}`);
+    const deleteOperaciones = {
+      method: "DELETE",
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    fetch(`${url}:${port}/api/ingresos/${id}`, deleteOperaciones)
+      .then((response) => response.json())
+      .then((respuesta) => {
+        console.log(respuesta);
+        fetchIngresos(); 
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el ingreso:', error);
+      });
   };
 
   return (
     <div className="container mt-5">
+      <div>
+        {/* Boton crear ingreso*/}
+        <button className="btn btn-primary btn-sm mr-2" onClick={()=>handleShow('')}>Crear Ingreso</button>
+      </div>
       <Table striped bordered hover responsive className="table-responsive-sm">
         <thead>
           <tr>
@@ -136,7 +201,7 @@ const IngresoList = () => {
               <td>{new Date(ingreso.creadoEn).toLocaleString()}</td>
               <td>
                 <button className="btn btn-primary btn-sm mr-2" onClick={() => handleShow(ingreso)}>Editar</button>
-                <button className="btn btn-danger btn-sm ml-2" onClick={() => handleDelete(ingreso)}>Eliminar</button>
+                <button className="btn btn-danger btn-sm ml-2" onClick={() => handleDelete(ingreso._id)}>Eliminar</button>
               </td>
             </tr>
           ))}
@@ -146,26 +211,27 @@ const IngresoList = () => {
       {/* Modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Editar Ingreso</Modal.Title>
+          <Modal.Title>{tipo}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {currentIngreso && (
+          {currentIngreso !== null && (
             <Form>
               <Form.Group controlId="id">
-                <Form.Label>Id Ingreso</Form.Label>
-                <Form.Control type="text" value={currentIngreso._id} readOnly />
+                <Form.Label hidden >Id Ingreso</Form.Label>
+                <Form.Control type="text" value={currentIngreso._id} readOnly hidden />
               </Form.Group>
               <Form.Group controlId="categoria">
-                <Form.Label>Id Categoria</Form.Label>
+                <Form.Label hidden >Id Categoria</Form.Label>
                 <Form.Control
                   type="text"
-                  value={currentIngreso.categoria._id} 
+                  value={currentIngreso?.categoria?._id || ''} 
                   readOnly
+                  hidden
                 />
                 <Form.Label>Categoría</Form.Label>
                 <Form.Control
                   type="text"
-                  value={currentIngreso.categoria.nombre || ''}
+                  value={currentIngreso?.categoria?.nombre || ''}
                   onChange={handleCategoriaChange}
                   placeholder="Escribe para buscar categorías..."
                 />
