@@ -31,6 +31,11 @@ const obtenerIngresosTotales = async (req, res) => {
     try {
         const sumTotal = await Ingreso.aggregate([
             {
+                $match: {
+                    estado: true
+                }
+            },
+            {
                 $group: {
                     _id: null,
                     totalValor: { $sum: "$valor" }
