@@ -6,22 +6,16 @@ const Ingreso = require('../models/ingreso')
 const obtenerIngresos = async (req,res = response) => {
     
     const {limite = '5',desde = '0'} = req.query
-    /*
-    const ingresos = await Ingreso.find({ estado: true }).populate({
-        path: 'categoria',
-        select: '-descripcion -estado -creadoEn -__v'
-    })
-
-    */
-   const [ ingresos ] = await Promise.all([
-    Ingreso.find({ estado: true })
-    .populate({
-        path: 'categoria',
-        select: '-descripcion -estado -creadoEn -__v'
-    })
-    .skip(desde)
-    .limit(limite)
-   ])
+    
+    const [ ingresos ] = await Promise.all([
+        Ingreso.find({ estado: true })
+        .populate({
+            path: 'categoria',
+            select: '-descripcion -estado -creadoEn -__v'
+        })
+        .skip(desde)
+        .limit(limite)
+    ])
 
     res.status(200).json({
         ingresos
