@@ -3,33 +3,32 @@ const { response } = require('express');
 
 const Ingreso = require('../models/ingreso')
 
-const obtenerIngresos = async (req,res = response) => {
-    
-    const { limite = '5',desde = '0', mes, anio } = req.query
+const obtenerIngresos = async (req, res = response) => {
+    const { limite = 5, desde = 0, anio, mes } = req.query;
 
-    //const fechaInicio = new Date(anio, mes, 1);
-    //const fechaFin = new Date(anio, mes, +1, 0);
+    // Convertimos desde y limite a números para usarlos correctamente
+    const limit = parseInt(limite, 10);
+    const skip = parseInt(desde, 10) * limit;
 
-    // Todo las fechas deben ser en este formato
-    const fechaInicio = "2025-01-22T05:00:00.000Z"
-    const fechaFin = "2025-02-23T05:00:00.000Z"
-    
-    const [ ingresos ] = await Promise.all([
-        Ingreso.find({ estado: true , creadoEn: { $gte: fechaInicio, $lte: fechaFin}})
-        .populate({
-            path: 'categoria',
-            select: '-descripcion -estado -creadoEn -__v'
-        })
-        .skip(desde)
-        .limit(limite)
-    ])
+    const fechaInicio = new Date(anio, mes - 1, 1);
+    const fechaFin = new Date(anio, mes, 0);
+
+    const ingresos = await Ingreso.find({
+        estado: true,
+        creadoEn: { $gte: fechaInicio, $lte: fechaFin }
+    })
+    .populate({
+        path: 'categoria',
+        select: '-descripcion -estado -creadoEn -__v'
+    })
+    .skip(skip)
+    .limit(limit);
 
     res.status(200).json({
-        ingresos,
-        fechaInicio,
-        fechaFin
-    })
-}
+        ingresos
+    });
+};
+
 
 const obtenerIngreso = async (req,res) => {
 
