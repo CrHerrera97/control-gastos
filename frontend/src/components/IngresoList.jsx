@@ -41,11 +41,19 @@ const IngresoList = () => {
   const [ paginacion, setPaginacion ] = useState(0);
 
   const sumarPaginacion = () => {
-    setPaginacion(paginacion+1)
+    
+    if(ingresos<5){
+    }else{
+      setPaginacion(paginacion+1)
+    }
   }
 
-  const restarPaginacion = () => {
-    setPaginacion(paginacion-1)
+  const restarPaginacion = (paginacion) => {
+    if(paginacion <= 0){
+      setPaginacion(0)
+    }else{
+      setPaginacion(paginacion-1)
+    }
   }
 
   // Reutilizar el modal para ingresos y ediciones
@@ -80,7 +88,7 @@ const IngresoList = () => {
   const handleCloseDelete = () => setModalEliminar(false);
   // Obtener ingresos
   useEffect(() => {
-    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}`)
+    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}&anio=${anio}&mes=${mes}`)
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos);
@@ -90,7 +98,7 @@ const IngresoList = () => {
         console.error('Error al obtener los ingresos:', error);
         setLoading(false);
       });
-  }, [paginacion]);
+  }, [paginacion,anio,mes]);
 
   // Buscar categorías
   const fetchCategorias = async (searchTerm) => {
@@ -140,7 +148,7 @@ const IngresoList = () => {
 
   // Tener los registros actualizados
   const fetchIngresos = () => {
-    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}`)
+    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}&anio=${anio}&mes=${mes}`)
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos); // Actualizar el estado de los ingresos
@@ -302,7 +310,7 @@ const IngresoList = () => {
       </Table>
       {/* Crear paginacion */}
         <div className="d-flex justify-content-start my-3">
-          <Button variant="primary" className="mx-2" onClick={() => { restarPaginacion() }}>Anterior</Button>
+          <Button variant="primary" className="mx-2" onClick={() => { restarPaginacion(paginacion) }}>Anterior</Button>
           <Button variant="primary" className="mx-2" onClick={() => { sumarPaginacion() }}>Siguiente</Button>
         </div>
         {/* Modal */}
