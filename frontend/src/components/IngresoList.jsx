@@ -149,7 +149,7 @@ const IngresoList = () => {
         }),
       };
   
-      fetch(`http://172.16.6.102:3000/api/ingresos/${idIngreso}`, putOperaciones)
+      fetch(`${url}:${port}/api/ingresos/${idIngreso}`, putOperaciones)
         .then((response) => response.json())
         .then((respuesta) => {
           // Actualizar el estado de los ingresos sin necesidad de recargar la página
