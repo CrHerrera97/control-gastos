@@ -215,7 +215,11 @@ const IngresoList = () => {
   };
 
   const selectStyle = {
-    width: '34%', // Cel
+    width: '54%', // Cel
+    maxWidth: '200px', // Pc
+  };
+  const selectStyleLabel = {
+    width: '26%', // Cel
     maxWidth: '200px', // Pc
   };
   
@@ -224,24 +228,39 @@ const IngresoList = () => {
       <div className="d-flex flex-column align-items-start mb-2">
         <h3 className="mb-0">Ingresos</h3>
         <div className="d-flex justify-content-between align-items-center my-2 w-100">
-          <Button variant="primary" onClick={handleShow}>
+          <Button variant="primary" onClick={()=>handleShow('')} style={selectStyle}>
             Crear Ingreso
           </Button>
-          <Form.Control type="text" placeholder="Año" value={anio} className="w-25" onChange={handleAnio} />
-          <Form.Select aria-label="Seleccionar mes" style={selectStyle} value={mes} onChange={handleMes}>
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-          </Form.Select>
+          <div className="d-flex align-items-center w-100">
+            <Form.Control
+              type="text"
+              placeholder="Año"
+              value={anio}
+              className="ms-auto"
+              style={selectStyleLabel}
+              onChange={handleAnio}
+            />
+            <Form.Select
+              aria-label="Seleccionar mes"
+              style={selectStyle}
+              value={mes}
+              onChange={handleMes}
+              className="ms-2"
+            >
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </Form.Select>
+          </div>
         </div>
       </div>
       <Table striped bordered hover responsive className="table-responsive-sm">
