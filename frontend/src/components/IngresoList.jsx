@@ -10,6 +10,8 @@ const IngresoList = () => {
   const [ingresos, setIngresos] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [ modalEliminar, setModalEliminar ] = useState(false);
+
   const obtenerAnioYmesActual = () => {
 
     const currentDate = new Date();
@@ -70,6 +72,12 @@ const IngresoList = () => {
     setShow(true);
   };
 
+  const handleShowDelete = (ingreso) => {
+      setCurrentIngreso(ingreso);
+      setModalEliminar(true);
+  };
+  
+  const handleCloseDelete = () => setModalEliminar(false);
   // Obtener ingresos
   useEffect(() => {
     fetch(`${url}:${port}/api/ingresos?desde=${paginacion}`)
@@ -197,7 +205,10 @@ const IngresoList = () => {
 
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (ingreso) => {
+
+    const id = ingreso
+
     const deleteOperaciones = {
       method: "DELETE",
       headers: { 'Content-Type': 'application/json' },
@@ -206,12 +217,13 @@ const IngresoList = () => {
     fetch(`${url}:${port}/api/ingresos/${id}`, deleteOperaciones)
       .then((response) => response.json())
       .then((respuesta) => {
-        console.log(respuesta);
         fetchIngresos(); 
+        handleCloseDelete();
       })
       .catch((error) => {
         console.error('Error al eliminar el ingreso:', error);
       });
+
   };
 
   const selectStyle = {
@@ -282,7 +294,7 @@ const IngresoList = () => {
               <td>{new Date(ingreso.creadoEn).toLocaleString()}</td>
               <td>
                 <Button variant="primary" className="btn-sm mx-2" onClick={() => handleShow(ingreso)}>Editar</Button>
-                <Button variant="danger" className="btn-sm mx-2" onClick={() => handleDelete(ingreso._id)}>Eliminar</Button>
+                <Button variant="danger" className="btn-sm mx-2" onClick={() => handleShowDelete(ingreso._id)}>Eliminar</Button>
               </td>
             </tr>
           ))}
@@ -363,6 +375,24 @@ const IngresoList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Modal Eliminar*/}
+      <Modal show={modalEliminar} onHide={handleCloseDelete}>
+      <Modal.Header closeButton>
+        <Modal.Title>{tipo}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        ¿Estás seguro de que deseas eliminar este registro de ingreso?
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseDelete}>
+          Cancelar
+        </Button>
+        <Button variant="danger" onClick={()=>handleDelete(currentIngreso)}>
+          Eliminar
+        </Button>
+      </Modal.Footer>
+    </Modal>
     </div>
   );
 };
