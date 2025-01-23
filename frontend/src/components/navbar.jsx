@@ -6,7 +6,7 @@ const MyNavbar = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Control Gastos</Navbar.Brand>
+        <Navbar.Brand href="/">Control Gastos Familia H.M</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

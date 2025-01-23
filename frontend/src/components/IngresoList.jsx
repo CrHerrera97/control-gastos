@@ -10,6 +10,42 @@ const IngresoList = () => {
   const [ingresos, setIngresos] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const obtenerAnioYmesActual = () => {
+
+    const currentDate = new Date();
+
+    const anio = currentDate.getFullYear();
+    const mes = currentDate.getMonth() + 1;
+    
+    return {anio, mes}
+  }
+
+  const [ anio, setAnio ] = useState(obtenerAnioYmesActual().anio)
+  const [ mes, setMes ] = useState(obtenerAnioYmesActual().mes)
+
+  // Manejador año
+
+  const handleAnio = (event) => {
+    setAnio(event.target.value)
+  }
+
+  // Manejado mes
+
+  const handleMes = (event) => {
+    setMes(event.target.value)
+  }
+
+  // Estado paginacion
+  const [ paginacion, setPaginacion ] = useState(0);
+
+  const sumarPaginacion = () => {
+    setPaginacion(paginacion+1)
+  }
+
+  const restarPaginacion = () => {
+    setPaginacion(paginacion-1)
+  }
+
   // Reutilizar el modal para ingresos y ediciones
   const [ tipo, setTipo ] = useState(null);
   
@@ -36,7 +72,7 @@ const IngresoList = () => {
 
   // Obtener ingresos
   useEffect(() => {
-    fetch(`${url}:${port}/api/ingresos`)
+    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}`)
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos);
@@ -46,7 +82,7 @@ const IngresoList = () => {
         console.error('Error al obtener los ingresos:', error);
         setLoading(false);
       });
-  }, []);
+  }, [paginacion]);
 
   // Buscar categorías
   const fetchCategorias = async (searchTerm) => {
@@ -96,7 +132,7 @@ const IngresoList = () => {
 
   // Tener los registros actualizados
   const fetchIngresos = () => {
-    fetch(`${url}:${port}/api/ingresos`)
+    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}`)
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos); // Actualizar el estado de los ingresos
@@ -178,11 +214,35 @@ const IngresoList = () => {
       });
   };
 
+  const selectStyle = {
+    width: '34%', // Cel
+    maxWidth: '200px', // Pc
+  };
+  
   return (
     <div className="container mt-5">
-      <div>
-        {/* Boton crear ingreso*/}
-        <button className="btn btn-primary btn-sm mr-2" onClick={()=>handleShow('')}>Crear Ingreso</button>
+      <div className="d-flex flex-column align-items-start mb-2">
+        <h3 className="mb-0">Ingresos</h3>
+        <div className="d-flex justify-content-between align-items-center my-2 w-100">
+          <Button variant="primary" onClick={handleShow}>
+            Crear Ingreso
+          </Button>
+          <Form.Control type="text" placeholder="Año" value={anio} className="w-25" onChange={handleAnio} />
+          <Form.Select aria-label="Seleccionar mes" style={selectStyle} value={mes} onChange={handleMes}>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </Form.Select>
+        </div>
       </div>
       <Table striped bordered hover responsive className="table-responsive-sm">
         <thead>
@@ -202,15 +262,19 @@ const IngresoList = () => {
               <td>{ingreso.estado ? 'Activo' : 'Inactivo'}</td>
               <td>{new Date(ingreso.creadoEn).toLocaleString()}</td>
               <td>
-                <button className="btn btn-primary btn-sm mr-2" onClick={() => handleShow(ingreso)}>Editar</button>
-                <button className="btn btn-danger btn-sm ml-2" onClick={() => handleDelete(ingreso._id)}>Eliminar</button>
+                <Button variant="primary" className="btn-sm mx-2" onClick={() => handleShow(ingreso)}>Editar</Button>
+                <Button variant="danger" className="btn-sm mx-2" onClick={() => handleDelete(ingreso._id)}>Eliminar</Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-
-      {/* Modal */}
+      {/* Crear paginacion */}
+        <div className="d-flex justify-content-start my-3">
+          <Button variant="primary" className="mx-2" onClick={() => { restarPaginacion() }}>Anterior</Button>
+          <Button variant="primary" className="mx-2" onClick={() => { sumarPaginacion() }}>Siguiente</Button>
+        </div>
+        {/* Modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{tipo}</Modal.Title>
@@ -219,11 +283,11 @@ const IngresoList = () => {
           {currentIngreso !== null && (
             <Form>
               <Form.Group controlId="id">
-                <Form.Label hidden >Id Ingreso</Form.Label>
+                <Form.Label hidden>Id Ingreso</Form.Label>
                 <Form.Control type="text" value={currentIngreso._id} readOnly hidden />
               </Form.Group>
               <Form.Group controlId="categoria">
-                <Form.Label hidden >Id Categoria</Form.Label>
+                <Form.Label hidden>Id Categoria</Form.Label>
                 <Form.Control
                   type="text"
                   value={currentIngreso?.categoria?._id || ''} 

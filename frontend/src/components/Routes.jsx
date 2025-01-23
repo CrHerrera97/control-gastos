@@ -12,7 +12,6 @@ const AppRoutes = () => {
         <DashBoard />
       </div>} />
       <Route path="/ingresos" element={<div>
-        <h3>Ingresos</h3>
         <IngresoList />
       </div>} />
       <Route path="/gastos" element={<h3>Gastos</h3>} />
