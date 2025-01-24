@@ -35,7 +35,8 @@ const obtenerGastos = async (req,res) => {
                 _id: 1,
                 valor: 1,
                 "subCategoriaDetalles.nombre": 1,
-                "categoriaDetalles.nombre": 1
+                "categoriaDetalles.nombre": 1,
+                descripcion: 1,
             }
         }
     ])
