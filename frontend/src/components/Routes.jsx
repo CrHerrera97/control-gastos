@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import IngresoList from "./IngresoList";
 import DashBoard from "./DashBoard";
+import GastosList from "./Gastos/GastoList";
 
 const AppRoutes = () => {
   return (
@@ -14,7 +15,9 @@ const AppRoutes = () => {
       <Route path="/ingresos" element={<div>
         <IngresoList />
       </div>} />
-      <Route path="/gastos" element={<h3>Gastos</h3>} />
+      <Route path="/gastos" element={<div>
+        <GastosList/>
+      </div>} />
     </Routes>
   );
 };
