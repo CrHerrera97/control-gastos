@@ -22,7 +22,24 @@ const GastosForm = () => {
     // Todo return modal
 
     return (
-        {/* Modal */}
+        <div>
+            <Modal show={modalEliminar} onHide={handleCloseDelete}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>{tipo}</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    ¿Estás seguro de que deseas eliminar este registro de ingreso?
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseDelete}>
+                      Cancelar
+                    </Button>
+                    <Button variant="danger" onClick={()=>handleDelete(currentIngreso)}>
+                      Eliminar
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+        </div>
         
     )
 }
