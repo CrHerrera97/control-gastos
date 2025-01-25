@@ -1,40 +1,21 @@
-import { useState } from "react"
-
 import { Table, Spinner, Modal, Form, Button, ListGroup } from 'react-bootstrap';
 
-const GastosForm = () => {
-
-    // Ponemos los estados para el modal reutilizable
-    const [ showModal, setShowModal ] = useState(false);
-
-    // Handle para modale
-    // Hanlde cierre modal
-
-    const handleCloseModal = () => setShowModal(false);
-
-    // Handle Mostar modal
-
-    const handleShowModal = () => {
-        // Mostrar modal
-        setShowModal(true)
-    }
-
-    // Todo return modal
-
+// Obtengo los estados a través de las props
+const GastosForm = ({ showModal, handleClose }) => {
     return (
         <div>
-            <Modal show={modalEliminar} onHide={handleCloseDelete}>
+            <Modal show={showModal} onHide={handleClose}>
                   <Modal.Header closeButton>
-                    <Modal.Title>{tipo}</Modal.Title>
+                    <Modal.Title></Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
                     ¿Estás seguro de que deseas eliminar este registro de ingreso?
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseDelete}>
+                    <Button variant="secondary" onClick={handleClose}>
                       Cancelar
                     </Button>
-                    <Button variant="danger" onClick={()=>handleDelete(currentIngreso)}>
+                    <Button variant="danger">
                       Eliminar
                     </Button>
                   </Modal.Footer>
