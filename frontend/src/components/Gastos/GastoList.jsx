@@ -1,33 +1,45 @@
-// Este componente usa el hook useFetchGastos
-
 import React from 'react';
 import useFetchGastos from '../../hooks/gastos/useFetchGastos';
-import { useState } from "react"
+import { useState } from "react";
 
 import GastosForm from './GastoForm';
 
 import { Table, Form, Button } from 'react-bootstrap';
 
-import { selectStyleMeses, selectStyleAnio, btnStyleAdd } from '../../common/dataEstilos'
+import { selectStyleMeses, selectStyleAnio, btnStyleAdd } from '../../common/dataEstilos';
 
 const GastosList = () => {
-  // Abrir o cerrar modal
+  // Estados modal
   const [ showModal, setShowModal ] = useState(false);
+  // Estados titulo modal Ingreso, Editar
+  const [ tipoModal, setTipoModal ] = useState(null);
+  // Estados actual gasto seleccionado
+  const [ currentGasto, setCurrentGasto ] = useState(null);
+  
 
-  // Funcion abrir modal
-  const handleShowModal = () => setShowModal(true)
+  // Manejadores abrir y cerrar modal
+  const handleShowModal = (ingreso) => {
+    if(!ingreso){
+      setTipoModal('Ingreso')
+      setCurrentGasto({ categoriaId : "", categoria: {}, valor: "", estado: true })
+    }else{
+      setTipoModal('Editar')
+    }
+    setShowModal(true);
+  }
   const handleCloseModal = () => setShowModal(false);
   
   const { gastos, loading, error } = useFetchGastos();
   
   if (loading) return <div>Cargando gastos...</div>;
   if (error) return <div>Error: {error}</div>;
+
   return (
       <div className="container mt-5">
         <div className="d-flex flex-column align-items-start mb-2">
           <h3 className="mb-0">Gastos</h3>
           <div className="d-flex justify-content-between align-items-center my-2 w-100">
-            <Button variant="primary" onClick={handleShowModal} style={btnStyleAdd}>
+            <Button variant="primary" onClick={()=>handleShowModal('')} style={btnStyleAdd}>
               Crear Gasto
             </Button>
             <div className="d-flex align-items-center w-100">
@@ -88,7 +100,7 @@ const GastosList = () => {
           </tbody>
         </Table>
         {/* Mostrar Modal */}
-        <GastosForm showModal={showModal} handleClose={handleCloseModal} />
+        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} />
         {/* Crear paginacion */}
           <div className="d-flex justify-content-start my-3">
             <Button variant="primary" className="mx-2">Anterior</Button>

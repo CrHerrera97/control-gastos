@@ -13,7 +13,7 @@ const useFetchGastos = () => {
         const loadGastos = async () => {
             try {
                 const data = await fetchGastos(); 
-                // el estado de gasto va a ser el ingereso al objeto data y al obj gastos
+                // El estado de gasto va a ser el ingreso al objeto data y al obj gastos
                 setGastos(data.gastos);
             } catch (err) {
                 setError(err.message);
