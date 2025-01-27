@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 
-import { fetchGastos, createGasto } from '../../services/gastos/gastosService';
+import { fetchGastos, createGasto, fetchCategoriaGasto } from '../../services/gastos/gastosService';
 
 // Hook para obtener los gastos
 
 const useGastos = () => {
-    const [gastos, setGastos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [ gastos, setGastos ] = useState([]);
+    const [ loading, setLoading ] = useState(true);
+    const [ error, setError ] = useState(null);
+
+    // Estados busqueda categorias gasto
+    const [ filteredCategoriasGasto, setfilteredCategoriasGasto ] = useState([]);
+    
 
     useEffect(()=>{
         const loadGastos = async () => {
@@ -36,7 +40,17 @@ const useGastos = () => {
         }
     }
 
-    return { gastos, loading, error, agregarGasto };
+    const filtarCategoriaGasto = async (searchTerm) => {
+        try {
+            const data = await fetchCategoriaGasto(searchTerm)
+            setfilteredCategoriasGasto(data.categoriasGasto)
+        } catch (error) {
+            setError(error.message)
+        }
+
+    }
+
+    return { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto };
 }
 
 export default useGastos;

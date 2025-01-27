@@ -15,14 +15,16 @@ const GastosList = () => {
   const [ tipoModal, setTipoModal ] = useState(null);
   // Estados actual gasto seleccionado
   const [ currentGasto, setCurrentGasto ] = useState(null);
+  // Sugerencias de las categorias de gasto filtradas
+  const [ showSuggestionsCategoriaGasto, setshowSuggestionsCategoriaGasto ] = useState(false);
   
-  const { gastos, loading, error, agregarGasto } = useGastos();
+  const { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto } = useGastos();
 
   // Manejadores abrir y cerrar modal
   const handleShowModal = (ingreso) => {
     if(!ingreso){
       setTipoModal('Ingreso')
-      setCurrentGasto({ categoria : "6787e49bcf43c345fac3b138", subCategoria: "6787e4ebcf43c345fac3b13f", descripcion: "", valor: 2 })
+      setCurrentGasto({ categoria : "", subCategoria: "", descripcion: "", valor: 0 })
     }else{
       setTipoModal('Editar')
     }
@@ -34,9 +36,26 @@ const GastosList = () => {
   const handleSaveChanges = (currentGasto) => {
     agregarGasto(currentGasto)
     handleCloseModal()
+  }
 
-    // actualizar gastos
+  // Manejador de cambios en el campo de busqueda de categorias
+  const handleCategoriaChange = (e) => {
+    const searchTerm = e.target.value;
+    
+    //console.log(filteredCategoriasGasto)
+    if(searchTerm.trim()){
+      setshowSuggestionsCategoriaGasto(true);
+      filtarCategoriaGasto(searchTerm)
+    }else{
+      setfilteredCategoriasGasto([]);
+    }
+  }
 
+  // Manejador para seleccionar una categoria
+
+  const handleCategoriaGastoSelect = (categoria) => {
+    setCurrentGasto({ ...currentGasto, categoria })
+    setshowSuggestionsCategoriaGasto(false);
   }
   
   if (loading) return <div>Cargando gastos...</div>;
@@ -108,7 +127,7 @@ const GastosList = () => {
           </tbody>
         </Table>
         {/* Mostrar Modal */}
-        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} handleSaveChanges={handleSaveChanges} />
+        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} handleSaveChanges={handleSaveChanges} handleCategoriaChange={handleCategoriaChange} filteredCategoriasGasto={filteredCategoriasGasto} handleCategoriaGastoSelect={handleCategoriaGastoSelect} />
         {/* Crear paginacion */}
           <div className="d-flex justify-content-start my-3">
             <Button variant="primary" className="mx-2">Anterior</Button>

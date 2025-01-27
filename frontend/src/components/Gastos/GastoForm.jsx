@@ -1,7 +1,7 @@
 import { Table, Spinner, Modal, Form, Button, ListGroup } from 'react-bootstrap';
 
 // Obtengo los estados a través de las props
-const GastosForm = ({ showModal, handleClose, tipoModal, currentGasto, setCurrentGasto, handleSaveChanges }) => {
+const GastosForm = ({ showModal, handleClose, tipoModal, currentGasto, setCurrentGasto, handleSaveChanges, handleCategoriaChange, filteredCategoriasGasto, handleCategoriaGastoSelect }) => {
     return (
       <div>
         {/* Modal Ingresar/Editar */}
@@ -13,36 +13,38 @@ const GastosForm = ({ showModal, handleClose, tipoModal, currentGasto, setCurren
           {currentGasto !== null && (
           <Form>
             <Form.Group controlId="id">
-            <Form.Label>Id Gasto</Form.Label>
-            <Form.Control type="text" value={''} readOnly/>
+              <Form.Label>Id Gasto</Form.Label>
+              <Form.Control type="text" value={''} readOnly/>
             </Form.Group>
             <Form.Group controlId="categoria">
-            <Form.Label>Id Categoria</Form.Label>
-            <Form.Control
-              type="text"
-              value={currentGasto.categoria || ''} 
-              onChange={(e) => setCurrentGasto({ ...currentGasto, categoria: e.target.value })}
-            />
+              <Form.Label>Id Categoria</Form.Label>
+              <Form.Control
+                type="text"
+                value={currentGasto.categoria || ''}
+                autocomplete="off"
+                onChange={(e) => setCurrentGasto({ ...currentGasto, categoria: e.target.value })}
+              />
             <Form.Label>Categoría</Form.Label>
             <Form.Control
               type="text"
-              value={''}
-              //onChange={}
+              value={currentGasto?.categoria?.nombre || ''}
+              autocomplete="off"
+              onChange={handleCategoriaChange}
               placeholder="Escribe para buscar categorías..."
             />
-            {/*showSuggestions && filteredCategorias.length > 0 && (
+            { filteredCategoriasGasto.length > 0 && (
               <ListGroup>
-              {filteredCategorias.map((categoria) => (
+              {filteredCategoriasGasto.map((categoria) => (
                 <ListGroup.Item
                 key={categoria._id}
-                action
-                onClick={() => handleCategoriaSelect(categoria)}
+                //action
+                onClick={() => handleCategoriaGastoSelect(categoria)}
                 >
                 {categoria.nombre}
                 </ListGroup.Item>
               ))}
               </ListGroup>
-            )*/}
+            )}
             </Form.Group>
             {/* Sub categorias*/}
             <Form.Group controlId="subCategoria">
@@ -78,6 +80,7 @@ const GastosForm = ({ showModal, handleClose, tipoModal, currentGasto, setCurren
             <Form.Label>Descripcion</Form.Label>
             <Form.Control
               type="text"
+              autocomplete="off"
               value={currentGasto.descripcion || ''} 
               onChange={(e) => setCurrentGasto({ ...currentGasto, descripcion: e.target.value })}
               //onChange={(e) => setCurrentIngreso({ ...currentGasto, valor: e.target.value })}

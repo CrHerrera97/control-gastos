@@ -21,3 +21,11 @@ export const createGasto = async (gasto) => {
     if (!response.ok) throw new Error('Error al crear el gasto');
     return await response.json();
 };
+
+// Obtener id x un nombre de categoria gasto
+
+export const fetchCategoriaGasto = async (searchTerm) => {
+    const response = await fetch(`${url}:${port}/api/categoria-gastos?nombre=${searchTerm}`)
+    if(!response.ok) throw new Error('Error al obtener los gastos');
+    return await response.json()
+}
