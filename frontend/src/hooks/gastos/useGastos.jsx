@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
-import { fetchGastos } from '../../services/gastos/gastosService';
+import { fetchGastos, createGasto } from '../../services/gastos/gastosService';
 
 // Hook para obtener los gastos
 
-const useFetchGastos = () => {
+const useGastos = () => {
     const [gastos, setGastos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -23,7 +23,20 @@ const useFetchGastos = () => {
         };
         loadGastos();
     }, []);
-    return { gastos, loading, error };
+
+    const agregarGasto = async (gasto) => {
+        setLoading(true);
+        try {
+            const newGasto = await createGasto(gasto);
+            setGastos((prevGastos) => [...prevGastos, newGasto]);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return { gastos, loading, error, agregarGasto };
 }
 
-export default useFetchGastos;
+export default useGastos;

@@ -1,5 +1,5 @@
 import React from 'react';
-import useFetchGastos from '../../hooks/gastos/useFetchGastos';
+import useGastos from '../../hooks/gastos/useGastos';
 import { useState } from "react";
 
 import GastosForm from './GastoForm';
@@ -16,20 +16,26 @@ const GastosList = () => {
   // Estados actual gasto seleccionado
   const [ currentGasto, setCurrentGasto ] = useState(null);
   
+  const { gastos, loading, error, agregarGasto } = useGastos();
 
   // Manejadores abrir y cerrar modal
   const handleShowModal = (ingreso) => {
     if(!ingreso){
       setTipoModal('Ingreso')
-      setCurrentGasto({ categoriaId : "", categoria: {}, valor: "", estado: true })
+      setCurrentGasto({ categoria : "", subCategoria: "", descripcion: "", valor: 0 })
     }else{
       setTipoModal('Editar')
     }
     setShowModal(true);
   }
   const handleCloseModal = () => setShowModal(false);
-  
-  const { gastos, loading, error } = useFetchGastos();
+
+  // Manejador guardar gasto
+  const handleSaveChanges = async (currentGasto) => {
+    await agregarGasto(currentGasto)
+    handleCloseModal()
+
+  }
   
   if (loading) return <div>Cargando gastos...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -87,12 +93,12 @@ const GastosList = () => {
           <tbody>
             {gastos.map((gasto) => (
               <tr key={gasto._id}>
-                <td>{gasto.categoriaDetalles.nombre}</td>
-                <td>{gasto.subCategoriaDetalles.nombre}</td>
+                <td>{gasto.categoriaDetalles?.nombre || '-'}</td>
+                <td>{gasto.subCategoriaDetalles?.nombre || '-'}</td>
                 <td>{gasto.descripcion || '-'}</td>
                 <td>{gasto.valor}</td>
                 <td>
-                  <Button variant="primary" className="btn-sm mx-2">Editar</Button>
+                  <Button variant="primary" className="btn-sm mx-2" onClick={()=>console.log(gasto)}>Editar</Button>
                   <Button variant="danger" className="btn-sm mx-2">Eliminar</Button>
                 </td>
               </tr>
@@ -100,7 +106,7 @@ const GastosList = () => {
           </tbody>
         </Table>
         {/* Mostrar Modal */}
-        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} />
+        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} handleSaveChanges={handleSaveChanges} />
         {/* Crear paginacion */}
           <div className="d-flex justify-content-start my-3">
             <Button variant="primary" className="mx-2">Anterior</Button>

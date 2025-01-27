@@ -1,27 +1,10 @@
 import { Table, Spinner, Modal, Form, Button, ListGroup } from 'react-bootstrap';
 
 // Obtengo los estados a través de las props
-const GastosForm = ({ showModal, handleClose, tipoModal }) => {
+const GastosForm = ({ showModal, handleClose, tipoModal, currentGasto, setCurrentGasto, handleSaveChanges }) => {
     return (
       <div>
         {/* Modal Ingresar/Editar */}
-        <Modal show={showModal} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>{tipoModal}</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                ¿Estás seguro de que deseas eliminar este registro de ingreso?
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Cancelar
-                </Button>
-                <Button variant="danger">
-                  Eliminar
-                </Button>
-              </Modal.Footer>
-            </Modal>
-        {/*
         <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{tipoModal}</Modal.Title>
@@ -30,25 +13,24 @@ const GastosForm = ({ showModal, handleClose, tipoModal }) => {
           {currentGasto !== null && (
           <Form>
             <Form.Group controlId="id">
-            <Form.Label hidden>Id Ingreso</Form.Label>
-            <Form.Control type="text" value={''} readOnly hidden />
+            <Form.Label>Id Gasto</Form.Label>
+            <Form.Control type="text" value={''} readOnly/>
             </Form.Group>
             <Form.Group controlId="categoria">
-            <Form.Label hidden>Id Categoria</Form.Label>
+            <Form.Label>Id Categoria</Form.Label>
             <Form.Control
               type="text"
-              value={currentGasto?.categoria?._id || ''} 
-              readOnly
-              hidden
+              value={currentGasto.categoria || ''} 
+              onChange={(e) => setCurrentGasto({ ...currentGasto, categoria: e.target.value })}
             />
             <Form.Label>Categoría</Form.Label>
             <Form.Control
               type="text"
-              value={currentGasto?.categoria?.nombre || ''}
-              onChange={handleCategoriaChange}
+              value={''}
+              //onChange={}
               placeholder="Escribe para buscar categorías..."
             />
-            {showSuggestions && filteredCategorias.length > 0 && (
+            {/*showSuggestions && filteredCategorias.length > 0 && (
               <ListGroup>
               {filteredCategorias.map((categoria) => (
                 <ListGroup.Item
@@ -60,23 +42,53 @@ const GastosForm = ({ showModal, handleClose, tipoModal }) => {
                 </ListGroup.Item>
               ))}
               </ListGroup>
-            )}
+            )*/}
+            </Form.Group>
+            {/* Sub categorias*/}
+            <Form.Group controlId="subCategoria">
+            <Form.Label>Id subCategoria</Form.Label>
+            <Form.Control
+              type="text"
+              value={currentGasto.subCategoria || ''} 
+              onChange={(e) => setCurrentGasto({ ...currentGasto, subCategoria: e.target.value })}
+            />
+            <Form.Label>Sub Categoría</Form.Label>
+            <Form.Control
+              type="text"
+              value={''}
+              //onChange={(e) => setCurrentGasto({ ...currentGasto, subCategoria: e.target.value })}
+              placeholder="Escribe para buscar Subcategorías..."
+            />
+            {/*showSuggestions && filteredCategorias.length > 0 && (
+              <ListGroup>
+              {filteredCategorias.map((categoria) => (
+                <ListGroup.Item
+                key={categoria._id}
+                action
+                onClick={() => handleCategoriaSelect(categoria)}
+                >
+                {categoria.nombre}
+                </ListGroup.Item>
+              ))}
+              </ListGroup>
+            )*/}
+            </Form.Group>
+            {/* Descripcion */}
+            <Form.Group controlId="descripcion">
+            <Form.Label>Descripcion</Form.Label>
+            <Form.Control
+              type="text"
+              value={currentGasto.descripcion || ''} 
+              onChange={(e) => setCurrentGasto({ ...currentGasto, descripcion: e.target.value })}
+              //onChange={(e) => setCurrentIngreso({ ...currentGasto, valor: e.target.value })}
+            />
             </Form.Group>
             <Form.Group controlId="valor">
             <Form.Label>Valor</Form.Label>
             <Form.Control
               type="number"
-              value={currentGasto.valor}
-              onChange={(e) => setCurrentIngreso({ ...currentGasto, valor: e.target.value })}
-            />
-            </Form.Group>
-            <Form.Group controlId="estado">
-            <Form.Label>Estado</Form.Label>
-            <Form.Check
-              type="checkbox"
-              label="Activo"
-              checked={currentIngreso.estado}
-              onChange={(e) => setCurrentIngreso({...currentGasto, estado: e.target.checked })}
+              value={currentGasto.valor || ''}
+              onChange={(e) => setCurrentGasto({ ...currentGasto, valor: e.target.value })}
             />
             </Form.Group>
           </Form>
@@ -86,13 +98,11 @@ const GastosForm = ({ showModal, handleClose, tipoModal }) => {
           <Button variant="secondary" onClick={handleClose}>
           Cerrar
           </Button>
-          <Button variant="primary" onClick={() => handleSaveChanges(currentGasto)}>
+          <Button variant="primary" onClick={()=>handleSaveChanges(currentGasto)}>
           Guardar Cambios
           </Button>
         </Modal.Footer>
         </Modal>
-        */}
-
         {/* Modal Eliminar */}
         {/*
         <Modal show={modalEliminar} onHide={handleCloseDelete}>

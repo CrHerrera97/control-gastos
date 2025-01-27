@@ -10,3 +10,14 @@ export const fetchGastos = async () => {
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
 }
+
+// Crear un nuevo gasto
+export const createGasto = async (gasto) => {
+    const response = await fetch(`${url}:${port}/api/gastos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([gasto]),
+    });
+    if (!response.ok) throw new Error('Error al crear el gasto');
+    return await response.json();
+};
