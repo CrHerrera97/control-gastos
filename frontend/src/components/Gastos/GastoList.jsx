@@ -47,6 +47,7 @@ const GastosList = () => {
       setshowSuggestionsCategoriaGasto(true);
       filtarCategoriaGasto(searchTerm)
     }else{
+      setshowSuggestionsCategoriaGasto(false)
       setfilteredCategoriasGasto([]);
     }
   }
