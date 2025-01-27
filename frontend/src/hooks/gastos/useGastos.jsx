@@ -22,7 +22,7 @@ const useGastos = () => {
             }
         };
         loadGastos();
-    }, []);
+    }, [ gastos ]);
 
     const agregarGasto = async (gasto) => {
         setLoading(true);

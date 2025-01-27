@@ -22,7 +22,7 @@ const GastosList = () => {
   const handleShowModal = (ingreso) => {
     if(!ingreso){
       setTipoModal('Ingreso')
-      setCurrentGasto({ categoria : "", subCategoria: "", descripcion: "", valor: 0 })
+      setCurrentGasto({ categoria : "6787e49bcf43c345fac3b138", subCategoria: "6787e4ebcf43c345fac3b13f", descripcion: "", valor: 2 })
     }else{
       setTipoModal('Editar')
     }
@@ -31,9 +31,11 @@ const GastosList = () => {
   const handleCloseModal = () => setShowModal(false);
 
   // Manejador guardar gasto
-  const handleSaveChanges = async (currentGasto) => {
-    await agregarGasto(currentGasto)
+  const handleSaveChanges = (currentGasto) => {
+    agregarGasto(currentGasto)
     handleCloseModal()
+
+    // actualizar gastos
 
   }
   
