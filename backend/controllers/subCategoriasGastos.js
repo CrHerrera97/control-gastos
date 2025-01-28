@@ -4,8 +4,18 @@ const SubCategoriaGasto = require('../models/subCategoriaGasto');
 
 
 const obtenerSubCategoriasGasto = async (req,res) => {
-    const subCategoriasGasto = await SubCategoriaGasto.find();
 
+    const { nombre } = req.query;
+
+    let subCategoriasGasto;
+
+    if(!nombre){
+        subCategoriasGasto = await SubCategoriaGasto.find();
+    }else{
+        subCategoriasGasto = await SubCategoriaGasto.find({
+            nombre: { $regex: nombre, $options: 'i' }
+        });
+    }
     res.status(200).json({
         subCategoriasGasto
     })

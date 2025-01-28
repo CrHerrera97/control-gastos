@@ -3,14 +3,14 @@ const { response } = require('express');
 const Gasto = require('../models/gasto');
 const Ingreso = require('../models/ingreso');
 
-const obtenerGastos = async (req,res) => {
+const obtenerGastos = async (req, res) => {
 
     // convertimos el string a booleano
     const estado = req.query.estado === 'true';
 
     const gastos = await Gasto.aggregate([
         {
-            $match : { estado }
+            $match: { estado }
         },
         {
             $lookup: {
@@ -34,16 +34,18 @@ const obtenerGastos = async (req,res) => {
             $project: {
                 _id: 1,
                 valor: 1,
-                "subCategoriaDetalles.nombre": 1,
-                "categoriaDetalles.nombre": 1,
                 descripcion: 1,
+                "categoriaDetalles._id": 1,
+                "categoriaDetalles.nombre": 1,
+                "subCategoriaDetalles._id": 1,
+                "subCategoriaDetalles.nombre": 1
             }
         }
-    ])
+    ]);
 
     res.status(200).json({
         gastos
-    })
+    });
 }
 
 const obtenerGasto = async (req,res) => {
@@ -59,6 +61,23 @@ const obtenerGasto = async (req,res) => {
     res.status(200).json({
         gasto
     })
+}
+
+const editarGasto = async (req,res) => {
+
+    const { id } = req.params;
+
+    const categoria = req.body.categoria;
+    const subCategoria = req.body.subCategoria;
+    const descripcion = req.body.descripcion;
+    const valor = req.body.valor;
+
+    const actualizarGasto = await Gasto.findByIdAndUpdate(
+        id,
+        { $set: { categoria, subCategoria, descripcion, valor }}
+    )
+
+    res.status(200).json(actualizarGasto)
 }
 
 const obtenerSaldo = async(req,res)=>{
@@ -277,4 +296,4 @@ const obtenerGastosPorSubCategoria = async (req, res) => {
     }
 }
 
-module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria }
+module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria }

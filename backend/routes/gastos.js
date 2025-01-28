@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria } = require('../controllers/gastos')
+const { obtenerGastos, obtenerGasto, editarGasto, obtenerSaldo, crearGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria } = require('../controllers/gastos')
 
 const router = Router();
 
@@ -9,6 +9,8 @@ router.get('/', obtenerGastos);
 router.get('/:id', obtenerGasto);
 
 router.get('/saldo/amount', obtenerSaldo);
+
+router.put('/:id', editarGasto);
 
 router.post('/', crearGasto);
 
