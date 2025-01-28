@@ -19,8 +19,8 @@ const GastosForm = ({
                 <Form.Control type="text" value={currentGasto.id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="idCategoria">
-                <Form.Label hidden>Id Categoría</Form.Label>
-                <Form.Control hidden type="text" value={currentGasto?.categoria?._id || ''} readOnly />
+                <Form.Label>Id Categoría</Form.Label>
+                <Form.Control type="text" value={currentGasto?.categoria?._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="categoria">
                 <Form.Label>Categoría</Form.Label>
@@ -52,10 +52,9 @@ const GastosForm = ({
                 )}
               </Form.Group>
               <Form.Group controlId="subCategoria">
-                <Form.Label hidden>Id subCategoría</Form.Label>
+                <Form.Label>Id subCategoría</Form.Label>
                 <Form.Control
                   type="text"
-                  hidden
                   value={currentGasto?.subCategoria?._id || ''}
                   readOnly
                 />
