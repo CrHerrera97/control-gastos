@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { fetchGastos, createGasto, fetchCategoriaGasto } from '../../services/gastos/gastosService';
+import { fetchGastos, createGasto, fetchCategoriaGasto, fetchSubCategoriaGasto } from '../../services/gastos/gastosService';
 
 // Hook para obtener los gastos
 
@@ -12,6 +12,8 @@ const useGastos = () => {
     // Estados busqueda categorias gasto
     const [ filteredCategoriasGasto, setfilteredCategoriasGasto ] = useState([]);
     
+    // Estados busqueda Subcategorias gasto
+    const [ filteredSubCategoriasGasto, setfilteredSubCategoriasGasto ] = useState([]);
 
     useEffect(()=>{
         const loadGastos = async () => {
@@ -50,7 +52,19 @@ const useGastos = () => {
 
     }
 
-    return { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto };
+    // Filtro de subcategorias
+
+    const filtarSubCategoriaGasto = async (searchTerm) => {
+        try {
+            const data = await fetchSubCategoriaGasto(searchTerm)
+            setfilteredSubCategoriasGasto(data.subCategoriasGasto)
+        } catch (error) {
+            setError(error.message)
+        }
+
+    }
+
+    return { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto };
 }
 
 export default useGastos;

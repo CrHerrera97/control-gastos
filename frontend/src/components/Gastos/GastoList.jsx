@@ -17,16 +17,19 @@ const GastosList = () => {
   const [ currentGasto, setCurrentGasto ] = useState(null);
   // Sugerencias de las categorias de gasto filtradas
   const [ showSuggestionsCategoriaGasto, setshowSuggestionsCategoriaGasto ] = useState(false);
+  // Sugerencias de las subcategorias de gasto filtradas
+  const [ showSuggestionsSubCategoriaGasto, setshowSuggestionsSubCategoriaGasto ] = useState(false);
   
-  const { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto } = useGastos();
+  const { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto } = useGastos();
 
   // Manejadores abrir y cerrar modal
-  const handleShowModal = (ingreso) => {
-    if(!ingreso){
+  const handleShowModal = (gasto) => {
+    if(!gasto){
       setTipoModal('Ingreso')
       setCurrentGasto({ categoria : "", subCategoria: "", descripcion: "", valor: 0 })
     }else{
       setTipoModal('Editar')
+      setCurrentGasto(gasto);
     }
     setShowModal(true);
   }
@@ -41,8 +44,6 @@ const GastosList = () => {
   // Manejador de cambios en el campo de busqueda de categorias
   const handleCategoriaChange = (e) => {
     const searchTerm = e.target.value;
-    
-    //console.log(filteredCategoriasGasto)
     if(searchTerm.trim()){
       setshowSuggestionsCategoriaGasto(true);
       filtarCategoriaGasto(searchTerm)
@@ -52,12 +53,30 @@ const GastosList = () => {
     }
   }
 
-  // Manejador para seleccionar una categoria
+    // Manejador de cambios en el campo de busqueda de subcategorias
+    const handleSubCategoriaChange = (e) => {
+      const searchTerm = e.target.value;
+      if(searchTerm.trim()){
+        setshowSuggestionsSubCategoriaGasto(true);
+        filtarSubCategoriaGasto(searchTerm)
+      }else{
+        setshowSuggestionsSubCategoriaGasto(false)
+        setfilteredSubCategoriasGasto([]);
+      }
+    }
+  
 
+  // Manejador para seleccionar una categoria
   const handleCategoriaGastoSelect = (categoria) => {
     setCurrentGasto({ ...currentGasto, categoria })
     setshowSuggestionsCategoriaGasto(false);
   }
+
+    // Manejador para seleccionar una subcategoria
+    const handleSubCategoriaGastoSelect = (subCategoria) => {
+      setCurrentGasto({ ...currentGasto, subCategoria })
+      setshowSuggestionsSubCategoriaGasto(false);
+    }
   
   if (loading) return <div>Cargando gastos...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -120,7 +139,7 @@ const GastosList = () => {
                 <td>{gasto.descripcion || '-'}</td>
                 <td>{gasto.valor}</td>
                 <td>
-                  <Button variant="primary" className="btn-sm mx-2" onClick={()=>console.log(gasto)}>Editar</Button>
+                  <Button variant="primary" className="btn-sm mx-2" onClick={()=> handleShowModal(gasto)}>Editar</Button>
                   <Button variant="danger" className="btn-sm mx-2">Eliminar</Button>
                 </td>
               </tr>
@@ -128,7 +147,7 @@ const GastosList = () => {
           </tbody>
         </Table>
         {/* Mostrar Modal */}
-        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} handleSaveChanges={handleSaveChanges} handleCategoriaChange={handleCategoriaChange} filteredCategoriasGasto={filteredCategoriasGasto} handleCategoriaGastoSelect={handleCategoriaGastoSelect} />
+        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} handleSaveChanges={handleSaveChanges} handleCategoriaChange={handleCategoriaChange} filteredCategoriasGasto={filteredCategoriasGasto} handleCategoriaGastoSelect={handleCategoriaGastoSelect} showSuggestionsCategoriaGasto={showSuggestionsCategoriaGasto} handleSubCategoriaChange={handleSubCategoriaChange} showSuggestionsSubCategoriaGasto={showSuggestionsSubCategoriaGasto} filteredSubCategoriasGasto={filteredSubCategoriasGasto} handleSubCategoriaGastoSelect={handleSubCategoriaGastoSelect} />
         {/* Crear paginacion */}
           <div className="d-flex justify-content-start my-3">
             <Button variant="primary" className="mx-2">Anterior</Button>

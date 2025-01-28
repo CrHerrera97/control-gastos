@@ -29,3 +29,11 @@ export const fetchCategoriaGasto = async (searchTerm) => {
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
 }
+
+// Obtener id x un nombre de subcategoria gasto
+
+export const fetchSubCategoriaGasto = async (searchTerm) => {
+    const response = await fetch(`${url}:${port}/api/sub-categoria-gastos?nombre=${searchTerm}`)
+    if(!response.ok) throw new Error('Error al obtener los gastos');
+    return await response.json()
+}
