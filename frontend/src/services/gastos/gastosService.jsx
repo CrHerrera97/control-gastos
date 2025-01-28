@@ -22,6 +22,21 @@ export const createGasto = async (gasto) => {
     return await response.json();
 };
 
+// Editar un nuevo gasto
+export const editGasto = async (gasto) => {
+
+    // TODO desestructurar el gasto para obtener el id, id_catego, id_subcate etc...
+
+    const { id, ...gastoSinId } = gasto;
+    const response = await fetch(`${url}:${port}/api/gastos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(gastoSinId),
+    });
+    if (!response.ok) throw new Error('Error al crear el gasto');
+    return await response.json();
+};
+
 // Obtener id x un nombre de categoria gasto
 
 export const fetchCategoriaGasto = async (searchTerm) => {

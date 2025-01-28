@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { fetchGastos, createGasto, fetchCategoriaGasto, fetchSubCategoriaGasto } from '../../services/gastos/gastosService';
+import { fetchGastos, createGasto, editGasto ,fetchCategoriaGasto, fetchSubCategoriaGasto } from '../../services/gastos/gastosService';
 
 // Hook para obtener los gastos
 
@@ -31,9 +31,21 @@ const useGastos = () => {
     }, [ gastos ]);
 
     const agregarGasto = async (gasto) => {
+        const { categoriaDetalles, subCategoriaDetalles, descripcion, valor } = gasto
+
+        // Creamos obj para almacenar el gasto
+
+        const newObject = {
+            categoria : categoriaDetalles._id,
+            subCategoria: subCategoriaDetalles._id,
+            descripcion,
+            valor
+        }
+        
         setLoading(true);
+        
         try {
-            const newGasto = await createGasto(gasto);
+            const newGasto = await createGasto(newObject);
             setGastos((prevGastos) => [...prevGastos, newGasto]);
         } catch (error) {
             setError(error.message);
@@ -41,6 +53,33 @@ const useGastos = () => {
             setLoading(false);
         }
     }
+
+    // Editar Gasto
+
+    const editarGasto = async (gasto) => {
+        const { _id, categoriaDetalles, subCategoriaDetalles, descripcion, valor } = gasto
+
+        // Creamos obj para almacenar el gasto
+        const newObject = {
+            id : _id,
+            categoria : categoriaDetalles._id,
+            subCategoria: subCategoriaDetalles._id,
+            descripcion,
+            valor
+        }
+        
+        setLoading(true);
+        
+        try {
+            const newGasto = await editGasto(newObject);
+            setGastos((prevGastos) => [...prevGastos, newGasto]);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     const filtarCategoriaGasto = async (searchTerm) => {
         try {
@@ -64,7 +103,7 @@ const useGastos = () => {
 
     }
 
-    return { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto };
+    return { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto };
 }
 
 export default useGastos;

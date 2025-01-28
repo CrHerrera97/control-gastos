@@ -20,13 +20,13 @@ const GastosList = () => {
   // Sugerencias de las subcategorias de gasto filtradas
   const [ showSuggestionsSubCategoriaGasto, setshowSuggestionsSubCategoriaGasto ] = useState(false);
   
-  const { gastos, loading, error, agregarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto } = useGastos();
+  const { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto } = useGastos();
 
   // Manejadores abrir y cerrar modal
   const handleShowModal = (gasto) => {
     if(!gasto){
       setTipoModal('Ingreso')
-      setCurrentGasto({ categoria : "", subCategoria: "", descripcion: "", valor: 0 })
+      setCurrentGasto({ categoriaDetalles : "", subCategoriaDetalles: "", descripcion: "", valor: 0 })
     }else{
       setTipoModal('Editar')
       setCurrentGasto(gasto);
@@ -37,8 +37,18 @@ const GastosList = () => {
 
   // Manejador guardar gasto
   const handleSaveChanges = (currentGasto) => {
-    agregarGasto(currentGasto)
-    handleCloseModal()
+
+    // Controlar ingreso o edicion usamos el ternario por si viene vacio
+    const gastoId = currentGasto._id ? currentGasto._id : 'ingreso';
+
+    if(gastoId == "ingreso"){
+      agregarGasto(currentGasto)
+      handleCloseModal()
+    }else{
+      editarGasto(currentGasto)
+      handleCloseModal()
+    }
+
   }
 
   // Manejador de cambios en el campo de busqueda de categorias

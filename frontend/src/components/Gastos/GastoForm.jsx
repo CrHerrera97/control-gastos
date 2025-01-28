@@ -16,21 +16,21 @@ const GastosForm = ({
             <Form>
               <Form.Group controlId="id">
                 <Form.Label>Id Gasto</Form.Label>
-                <Form.Control type="text" value={currentGasto.id || ''} readOnly />
+                <Form.Control type="text" value={currentGasto._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="idCategoria">
                 <Form.Label>Id Categoría</Form.Label>
-                <Form.Control type="text" value={currentGasto?.categoria?._id || ''} readOnly />
+                <Form.Control type="text" value={currentGasto?.categoriaDetalles?._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="categoria">
                 <Form.Label>Categoría</Form.Label>
                 <Form.Control
                   type="text"
-                  value={currentGasto?.categoria?.nombre || ''}
+                  value={currentGasto?.categoriaDetalles?.nombre || ''}
                   autoComplete="off"
                   onChange={(e) => {
                     handleCategoriaChange(e);
-                    setCurrentGasto({ ...currentGasto, categoria: { nombre: e.target.value } });
+                    setCurrentGasto({ ...currentGasto, categoriaDetalles: { nombre: e.target.value } });
                   }}
                   placeholder="Escribe para buscar categorías..."
                 />
@@ -41,7 +41,7 @@ const GastosForm = ({
                         key={categoria._id}
                         onClick={() => {
                           handleCategoriaGastoSelect(categoria);
-                          setCurrentGasto({ ...currentGasto, categoria: categoria });
+                          setCurrentGasto({ ...currentGasto, categoriaDetalles: categoria });
                           handleCategoriaChange({ target: { value: '' } }); // Borrar listado
                         }}
                       >
@@ -55,17 +55,17 @@ const GastosForm = ({
                 <Form.Label>Id subCategoría</Form.Label>
                 <Form.Control
                   type="text"
-                  value={currentGasto?.subCategoria?._id || ''}
+                  value={currentGasto?.subCategoriaDetalles?._id || ''}
                   readOnly
                 />
                 <Form.Label>Sub Categoría</Form.Label>
                 <Form.Control
                   type="text"
-                  value={currentGasto?.subCategoria?.nombre || ''}
+                  value={currentGasto?.subCategoriaDetalles?.nombre || ''}
                   placeholder="Escribe para buscar Subcategorías..."
                   onChange={(e) => {
                     handleSubCategoriaChange(e);
-                    setCurrentGasto({ ...currentGasto, subCategoria: { nombre: e.target.value } });
+                    setCurrentGasto({ ...currentGasto, subCategoriaDetalles: { nombre: e.target.value } });
                   }}
                 />
                 {filteredSubCategoriasGasto.length > 0 && (
@@ -75,7 +75,7 @@ const GastosForm = ({
                         key={subCategoria._id}
                         onClick={() => {
                           handleSubCategoriaGastoSelect(subCategoria);
-                          setCurrentGasto({ ...currentGasto, subCategoria: subCategoria });
+                          setCurrentGasto({ ...currentGasto, subCategoriaDetalles: subCategoria });
                           handleSubCategoriaChange({ target: { value: '' } }); // Borrar listado
                         }}
                       >
