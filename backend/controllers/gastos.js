@@ -38,7 +38,8 @@ const obtenerGastos = async (req, res) => {
                 "categoriaDetalles._id": 1,
                 "categoriaDetalles.nombre": 1,
                 "subCategoriaDetalles._id": 1,
-                "subCategoriaDetalles.nombre": 1
+                "subCategoriaDetalles.nombre": 1,
+                creadoEn: 1
             }
         }
     ]);
