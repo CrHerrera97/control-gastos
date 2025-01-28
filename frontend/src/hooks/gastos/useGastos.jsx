@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { fetchGastos, createGasto, editGasto ,fetchCategoriaGasto, fetchSubCategoriaGasto } from '../../services/gastos/gastosService';
+import { fetchGastos, createGasto, editGasto, deleteGasto, fetchCategoriaGasto, fetchSubCategoriaGasto } from '../../services/gastos/gastosService';
 
 // Hook para obtener los gastos
 
@@ -80,6 +80,21 @@ const useGastos = () => {
         }
     }
 
+    // Eliminar
+
+    const eliminarGasto = async (gasto) => {
+        setLoading(true);
+        
+        try {
+            const borrarGasto = await deleteGasto(gasto);
+            setGastos((prevGastos) => [...prevGastos, borrarGasto]);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     const filtarCategoriaGasto = async (searchTerm) => {
         try {
@@ -103,7 +118,7 @@ const useGastos = () => {
 
     }
 
-    return { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto };
+    return { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto, eliminarGasto };
 }
 
 export default useGastos;

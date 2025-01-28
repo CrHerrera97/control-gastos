@@ -13,6 +13,8 @@ const GastosList = () => {
   const [ showModal, setShowModal ] = useState(false);
   // Estados titulo modal Ingreso, Editar
   const [ tipoModal, setTipoModal ] = useState(null);
+  // Estados modal eliminar
+  const [ modalEliminar, setModalEliminar ] = useState(false);
   // Estados actual gasto seleccionado
   const [ currentGasto, setCurrentGasto ] = useState(null);
   // Sugerencias de las categorias de gasto filtradas
@@ -20,7 +22,7 @@ const GastosList = () => {
   // Sugerencias de las subcategorias de gasto filtradas
   const [ showSuggestionsSubCategoriaGasto, setshowSuggestionsSubCategoriaGasto ] = useState(false);
   
-  const { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto } = useGastos();
+  const { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto, eliminarGasto } = useGastos();
 
   // Manejadores abrir y cerrar modal
   const handleShowModal = (gasto) => {
@@ -40,7 +42,6 @@ const GastosList = () => {
 
     // Controlar ingreso o edicion usamos el ternario por si viene vacio
     const gastoId = currentGasto._id ? currentGasto._id : 'ingreso';
-
     if(gastoId == "ingreso"){
       agregarGasto(currentGasto)
       handleCloseModal()
@@ -48,7 +49,6 @@ const GastosList = () => {
       editarGasto(currentGasto)
       handleCloseModal()
     }
-
   }
 
   // Manejador de cambios en el campo de busqueda de categorias
@@ -82,11 +82,25 @@ const GastosList = () => {
     setshowSuggestionsCategoriaGasto(false);
   }
 
-    // Manejador para seleccionar una subcategoria
-    const handleSubCategoriaGastoSelect = (subCategoria) => {
-      setCurrentGasto({ ...currentGasto, subCategoria })
-      setshowSuggestionsSubCategoriaGasto(false);
-    }
+  // Manejador para seleccionar una subcategoria
+  const handleSubCategoriaGastoSelect = (subCategoria) => {
+    setCurrentGasto({ ...currentGasto, subCategoria })
+    setshowSuggestionsSubCategoriaGasto(false);
+  }
+
+  const handleShowDelete = (gasto) => {
+    setCurrentGasto(gasto)
+    setModalEliminar(true)
+  }
+
+  // Manejador cerrar modal eliminar
+  const handleCloseModalEliminar = () => setModalEliminar(false);
+
+  const handleDelete = (gasto) => {
+    // Todo envio a custom hook para eliminar
+    eliminarGasto(gasto)
+    handleCloseModalEliminar();
+  }
   
   if (loading) return <div>Cargando gastos...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -138,6 +152,7 @@ const GastosList = () => {
               <th>SubCategoria</th>
               <th>Descripcion</th>
               <th>Valor</th>
+              <th>Fecha de Creación</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -148,16 +163,25 @@ const GastosList = () => {
                 <td>{gasto.subCategoriaDetalles?.nombre || '-'}</td>
                 <td>{gasto.descripcion || '-'}</td>
                 <td>{gasto.valor}</td>
+                <td>{gasto.creadoEn}</td>
                 <td>
                   <Button variant="primary" className="btn-sm mx-2" onClick={()=> handleShowModal(gasto)}>Editar</Button>
-                  <Button variant="danger" className="btn-sm mx-2">Eliminar</Button>
+                  <Button variant="danger" className="btn-sm mx-2" onClick={()=> handleShowDelete(gasto._id)}>Eliminar</Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
         {/* Mostrar Modal */}
-        <GastosForm showModal={showModal} handleClose={handleCloseModal} tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} handleSaveChanges={handleSaveChanges} handleCategoriaChange={handleCategoriaChange} filteredCategoriasGasto={filteredCategoriasGasto} handleCategoriaGastoSelect={handleCategoriaGastoSelect} showSuggestionsCategoriaGasto={showSuggestionsCategoriaGasto} handleSubCategoriaChange={handleSubCategoriaChange} showSuggestionsSubCategoriaGasto={showSuggestionsSubCategoriaGasto} filteredSubCategoriasGasto={filteredSubCategoriasGasto} handleSubCategoriaGastoSelect={handleSubCategoriaGastoSelect} />
+        <GastosForm showModal={showModal} handleClose={handleCloseModal} 
+        tipoModal={tipoModal} currentGasto={currentGasto} setCurrentGasto={setCurrentGasto} 
+        handleSaveChanges={handleSaveChanges} handleCategoriaChange={handleCategoriaChange} 
+        filteredCategoriasGasto={filteredCategoriasGasto} handleCategoriaGastoSelect={handleCategoriaGastoSelect} 
+        showSuggestionsCategoriaGasto={showSuggestionsCategoriaGasto} handleSubCategoriaChange={handleSubCategoriaChange} 
+        showSuggestionsSubCategoriaGasto={showSuggestionsSubCategoriaGasto} filteredSubCategoriasGasto={filteredSubCategoriasGasto} 
+        handleSubCategoriaGastoSelect={handleSubCategoriaGastoSelect} modalEliminar={modalEliminar} handleCloseModalEliminar={handleCloseModalEliminar}
+        handleDelete={handleDelete}
+        />
         {/* Crear paginacion */}
           <div className="d-flex justify-content-start my-3">
             <Button variant="primary" className="mx-2">Anterior</Button>

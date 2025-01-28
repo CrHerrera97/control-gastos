@@ -37,6 +37,17 @@ export const editGasto = async (gasto) => {
     return await response.json();
 };
 
+export const deleteGasto = async (gasto) => {
+    // TODO desestructurar el gasto para obtener el id, id_catego, id_subcate etc...
+
+    const response = await fetch(`${url}:${port}/api/gastos/${gasto}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) throw new Error('Error al eliminar el gasto');
+    return await response.json();
+};
+
 // Obtener id x un nombre de categoria gasto
 
 export const fetchCategoriaGasto = async (searchTerm) => {

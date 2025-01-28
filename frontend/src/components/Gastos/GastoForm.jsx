@@ -3,7 +3,8 @@ import { Modal, Form, Button, ListGroup } from 'react-bootstrap';
 const GastosForm = ({ 
   showModal, handleClose, tipoModal, currentGasto, setCurrentGasto, handleSaveChanges, 
   handleCategoriaChange, filteredCategoriasGasto, handleCategoriaGastoSelect, showSuggestionsCategoriaGasto, 
-  handleSubCategoriaChange, showSuggestionsSubCategoriaGasto, filteredSubCategoriasGasto, handleSubCategoriaGastoSelect 
+  handleSubCategoriaChange, showSuggestionsSubCategoriaGasto, filteredSubCategoriasGasto, handleSubCategoriaGastoSelect,
+  modalEliminar, handleCloseModalEliminar, handleDelete
 }) => {
   return (
     <div>
@@ -15,12 +16,12 @@ const GastosForm = ({
           {currentGasto !== null && (
             <Form>
               <Form.Group controlId="id">
-                <Form.Label>Id Gasto</Form.Label>
-                <Form.Control type="text" value={currentGasto._id || ''} readOnly />
+                <Form.Label hidden >Id Gasto</Form.Label>
+                <Form.Control hidden type="text" value={currentGasto._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="idCategoria">
-                <Form.Label>Id Categoría</Form.Label>
-                <Form.Control type="text" value={currentGasto?.categoriaDetalles?._id || ''} readOnly />
+                <Form.Label hidden>Id Categoría</Form.Label>
+                <Form.Control hidden type="text" value={currentGasto?.categoriaDetalles?._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="categoria">
                 <Form.Label>Categoría</Form.Label>
@@ -52,9 +53,10 @@ const GastosForm = ({
                 )}
               </Form.Group>
               <Form.Group controlId="subCategoria">
-                <Form.Label>Id subCategoría</Form.Label>
+                <Form.Label hidden>Id subCategoría</Form.Label>
                 <Form.Control
                   type="text"
+                  hidden
                   value={currentGasto?.subCategoriaDetalles?._id || ''}
                   readOnly
                 />
@@ -113,6 +115,24 @@ const GastosForm = ({
             Guardar Cambios
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      {/* Modal Eliminar*/}
+      <Modal show={modalEliminar} onHide={handleCloseModalEliminar}>
+      <Modal.Header closeButton>
+        <Modal.Title>Eliminar</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        ¿Estás seguro de que deseas eliminar este registro de gasto?
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModalEliminar}>
+          Cancelar
+        </Button>
+        <Button variant="danger" onClick={()=>handleDelete(currentGasto)}>
+          Eliminar
+        </Button>
+      </Modal.Footer>
       </Modal>
     </div>
   );
