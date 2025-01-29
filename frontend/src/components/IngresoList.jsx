@@ -338,6 +338,7 @@ const IngresoList = () => {
                   type="text"
                   value={currentIngreso?.categoria?.nombre || ''}
                   onChange={handleCategoriaChange}
+                  autoComplete="off"
                   placeholder="Escribe para buscar categorías..."
                 />
                 {showSuggestions && filteredCategorias.length > 0 && (

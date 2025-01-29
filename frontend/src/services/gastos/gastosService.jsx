@@ -5,8 +5,8 @@ const port = import.meta.env.VITE_PORT;
 
 // Obtener los gastos
 
-export const fetchGastos = async () => {
-    const response = await fetch(`${url}:${port}/api/gastos?estado=true`)
+export const fetchGastos = async (paginacion,mes,anio) => {
+    const response = await fetch(`${url}:${port}/api/gastos?desde=${paginacion}&anio=${anio}&mes=${mes}`)
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
 }
