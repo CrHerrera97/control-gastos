@@ -15,10 +15,25 @@ const useGastos = () => {
     // Estados busqueda Subcategorias gasto
     const [ filteredSubCategoriasGasto, setfilteredSubCategoriasGasto ] = useState([]);
 
+    const obtenerAnioYmesActual = () => {
+
+        const currentDate = new Date();
+    
+        const anio = currentDate.getFullYear();
+        const mes = currentDate.getMonth() + 1;
+        
+        return {anio, mes}
+      }
+
+    // Recibir paginacion, el anio y mes
+    const [ paginacion, setPaginacion ] = useState(0)
+    const [ anio, setAnio ] = useState(obtenerAnioYmesActual().anio)
+    const [ mes, setMes ] = useState(obtenerAnioYmesActual().mes)
+
     useEffect(()=>{
         const loadGastos = async () => {
             try {
-                const data = await fetchGastos(); 
+                const data = await fetchGastos(paginacion,mes,anio); 
                 // El estado de gasto va a ser el ingreso al objeto data y al obj gastos
                 setGastos(data.gastos);
             } catch (err) {
@@ -28,7 +43,7 @@ const useGastos = () => {
             }
         };
         loadGastos();
-    }, [ gastos ]);
+    }, [ paginacion, anio, mes ]);
 
     const agregarGasto = async (gasto) => {
         const { categoriaDetalles, subCategoriaDetalles, descripcion, valor } = gasto
@@ -118,7 +133,11 @@ const useGastos = () => {
 
     }
 
-    return { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto, eliminarGasto };
+    return { gastos, loading, error, agregarGasto, editarGasto, 
+        filtarCategoriaGasto, filteredCategoriasGasto, 
+        setfilteredCategoriasGasto, filtarSubCategoriaGasto, 
+        filteredSubCategoriasGasto, setfilteredSubCategoriasGasto, 
+        eliminarGasto, paginacion, setPaginacion, mes, setMes, anio, setAnio };
 }
 
 export default useGastos;

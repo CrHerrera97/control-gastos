@@ -22,7 +22,11 @@ const GastosList = () => {
   // Sugerencias de las subcategorias de gasto filtradas
   const [ showSuggestionsSubCategoriaGasto, setshowSuggestionsSubCategoriaGasto ] = useState(false);
   
-  const { gastos, loading, error, agregarGasto, editarGasto, filtarCategoriaGasto, filteredCategoriasGasto, setfilteredCategoriasGasto, filtarSubCategoriaGasto, filteredSubCategoriasGasto, setfilteredSubCategoriasGasto, eliminarGasto } = useGastos();
+  const { gastos, loading, error, agregarGasto, editarGasto, 
+    filtarCategoriaGasto, filteredCategoriasGasto, 
+    setfilteredCategoriasGasto, filtarSubCategoriaGasto, 
+    filteredSubCategoriasGasto, setfilteredSubCategoriasGasto, 
+    eliminarGasto, paginacion, setPaginacion, mes, setMes, anio, setAnio } = useGastos();
 
   // Manejadores abrir y cerrar modal
   const handleShowModal = (gasto) => {
@@ -101,6 +105,30 @@ const GastosList = () => {
     eliminarGasto(gasto)
     handleCloseModalEliminar();
   }
+
+  // Manejadores de paginacion
+  const sumarPaginacion = () => {
+    if(gastos<5){
+    }else{
+      setPaginacion(paginacion+1)
+    }
+  }
+
+  const restarPaginacion = () => {
+    setPaginacion(paginacion-1)
+  }
+
+  // Manejador anio
+  const handleAnio = (event) => {
+    setAnio(event.target.value)
+  }
+
+  // Manejado mes
+
+  const handleMes = (event) => {
+    setMes(event.target.value)
+  }
+
   
   if (loading) return <div>Cargando gastos...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -110,23 +138,23 @@ const GastosList = () => {
         <div className="d-flex flex-column align-items-start mb-2">
           <h3 className="mb-0">Gastos</h3>
           <div className="d-flex justify-content-between align-items-center my-2 w-100">
-            <Button variant="primary" onClick={()=>handleShowModal('')} style={btnStyleAdd}>
+            <Button variant="primary" onClick={()=>handleShowModal(null)} style={btnStyleAdd}>
               Crear Gasto
             </Button>
             <div className="d-flex align-items-center w-100">
               <Form.Control
                 type="text"
                 placeholder="Año"
-                value={''}
+                value={anio}
                 className="ms-auto"
                 style={selectStyleAnio}
-                onChange={''}
+                onChange={handleAnio}
               />
               <Form.Select
                 aria-label="Seleccionar mes"
                 style={selectStyleMeses}
-                value={''}
-                onChange={''}
+                value={mes}
+                onChange={handleMes}
                 className="ms-2"
               >
                 <option value="1">Enero</option>
@@ -163,7 +191,7 @@ const GastosList = () => {
                 <td>{gasto.subCategoriaDetalles?.nombre || '-'}</td>
                 <td>{gasto.descripcion || '-'}</td>
                 <td>{gasto.valor}</td>
-                <td>{gasto.creadoEn}</td>
+                <td>{new Date(gasto.creadoEn).toLocaleString()}</td>
                 <td>
                   <Button variant="primary" className="btn-sm mx-2" onClick={()=> handleShowModal(gasto)}>Editar</Button>
                   <Button variant="danger" className="btn-sm mx-2" onClick={()=> handleShowDelete(gasto._id)}>Eliminar</Button>
@@ -184,8 +212,8 @@ const GastosList = () => {
         />
         {/* Crear paginacion */}
           <div className="d-flex justify-content-start my-3">
-            <Button variant="primary" className="mx-2">Anterior</Button>
-            <Button variant="primary" className="mx-2">Siguiente</Button>
+            <Button variant="primary" className="mx-2" onClick={()=>restarPaginacion()} >Anterior</Button>
+            <Button variant="primary" className="mx-2" onClick={()=>sumarPaginacion()} >Siguiente</Button>
           </div>
       </div>
   );

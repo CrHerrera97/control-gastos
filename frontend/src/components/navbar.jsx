@@ -1,6 +1,6 @@
 // Navbar.jsx
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
 const MyNavbar = () => {
   return (
@@ -10,9 +10,16 @@ const MyNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/ingresos">Ingresos</Nav.Link>
-            <Nav.Link href="/gastos">Gastos</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <NavDropdown title="Ingresos" id="basic-nav-dropdown" menuVariant="dark">
+              <NavDropdown.Item href="/ingresos">Ingresos</NavDropdown.Item>
+              <NavDropdown.Item href="#">Categorias Ingresos</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Gastos" id="basic-nav-dropdown" menuVariant="dark">
+              <NavDropdown.Item href="/gastos">Gastos</NavDropdown.Item>
+              <NavDropdown.Item href="#">Categorias Gastos</NavDropdown.Item>
+              <NavDropdown.Item href="#">Sub Categorias Gastos</NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="#">Reportes</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link href="#login">Login</Nav.Link>

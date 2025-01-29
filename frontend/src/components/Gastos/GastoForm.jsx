@@ -16,7 +16,7 @@ const GastosForm = ({
           {currentGasto !== null && (
             <Form>
               <Form.Group controlId="id">
-                <Form.Label hidden >Id Gasto</Form.Label>
+                <Form.Label hidden>Id Gasto</Form.Label>
                 <Form.Control hidden type="text" value={currentGasto._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="idCategoria">
@@ -65,6 +65,7 @@ const GastosForm = ({
                   type="text"
                   value={currentGasto?.subCategoriaDetalles?.nombre || ''}
                   placeholder="Escribe para buscar Subcategorías..."
+                  autoComplete="off"
                   onChange={(e) => {
                     handleSubCategoriaChange(e);
                     setCurrentGasto({ ...currentGasto, subCategoriaDetalles: { nombre: e.target.value } });

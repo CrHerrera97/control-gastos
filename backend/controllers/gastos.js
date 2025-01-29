@@ -4,13 +4,26 @@ const Gasto = require('../models/gasto');
 const Ingreso = require('../models/ingreso');
 
 const obtenerGastos = async (req, res) => {
+    const { limite = 5, desde = 0, anio, mes } = req.query;
 
     // convertimos el string a booleano
     const estado = req.query.estado === 'true';
 
+    const limit = parseInt(limite, 10);
+    const skip = parseInt(desde, 10) * limit;
+
+    const fechaInicio = new Date(anio, mes - 1, 1);
+    const fechaFin = new Date(anio, mes, 0);
+
     const gastos = await Gasto.aggregate([
         {
-            $match: { estado }
+            $match: {
+                estado: true,
+                creadoEn: {
+                    $gte: fechaInicio,
+                    $lt: fechaFin
+                }
+            }
         },
         {
             $lookup: {
@@ -41,7 +54,9 @@ const obtenerGastos = async (req, res) => {
                 "subCategoriaDetalles.nombre": 1,
                 creadoEn: 1
             }
-        }
+        },
+        { $skip: skip },
+        { $limit: limit }
     ]);
 
     res.status(200).json({
