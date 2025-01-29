@@ -43,7 +43,7 @@ const useGastos = () => {
             }
         };
         loadGastos();
-    }, [ paginacion, anio, mes ]);
+    }, [ gastos, paginacion, anio, mes ]);
 
     const agregarGasto = async (gasto) => {
         const { categoriaDetalles, subCategoriaDetalles, descripcion, valor } = gasto
