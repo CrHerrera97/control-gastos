@@ -43,7 +43,6 @@ const GastosList = () => {
 
   // Manejador guardar gasto
   const handleSaveChanges = (currentGasto) => {
-
     // Controlar ingreso o edicion usamos el ternario por si viene vacio
     const gastoId = currentGasto._id ? currentGasto._id : 'ingreso';
     if(gastoId == "ingreso"){

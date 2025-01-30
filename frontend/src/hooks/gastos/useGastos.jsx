@@ -43,7 +43,7 @@ const useGastos = () => {
             }
         };
         loadGastos();
-    }, [ gastos, paginacion, anio, mes ]);
+    }, [ paginacion, anio, mes ]);
 
     const agregarGasto = async (gasto) => {
         const { subCategoriaDetalles, descripcion, valor } = gasto
@@ -72,11 +72,11 @@ const useGastos = () => {
     // Editar Gasto
 
     const editarGasto = async (gasto) => {
-        const { _id, subCategoriaDetalles, descripcion, valor } = gasto
+        const { _id, categoriaDetalles, subCategoriaDetalles, descripcion, valor } = gasto
         // Creamos obj para almacenar el gasto
         const newObject = {
             id : _id,
-            categoria : subCategoriaDetalles.categoriaDetalles._id,
+            categoria : categoriaDetalles._id,
             subCategoria: subCategoriaDetalles._id,
             descripcion,
             valor
