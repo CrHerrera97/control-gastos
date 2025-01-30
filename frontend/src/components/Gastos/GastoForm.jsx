@@ -21,36 +21,17 @@ const GastosForm = ({
               </Form.Group>
               <Form.Group controlId="idCategoria">
                 <Form.Label hidden>Id Categoría</Form.Label>
-                <Form.Control hidden type="text" value={currentGasto?.categoriaDetalles?._id || ''} readOnly />
+                <Form.Control hidden type="text" value={currentGasto?.subCategoriaDetalles?.categoriaDetalles?._id || currentGasto?.categoriaDetalles?._id || ''} readOnly />
               </Form.Group>
               <Form.Group controlId="categoria">
                 <Form.Label>Categoría</Form.Label>
                 <Form.Control
                   type="text"
-                  value={currentGasto?.categoriaDetalles?.nombre || ''}
+                  value={currentGasto?.subCategoriaDetalles?.categoriaDetalles?.nombre || currentGasto?.categoriaDetalles?.nombre || ''}
                   autoComplete="off"
-                  onChange={(e) => {
-                    handleCategoriaChange(e);
-                    setCurrentGasto({ ...currentGasto, categoriaDetalles: { nombre: e.target.value } });
-                  }}
+                  disabled
                   placeholder="Escribe para buscar categorías..."
                 />
-                {filteredCategoriasGasto.length > 0 && (
-                  <ListGroup>
-                    {filteredCategoriasGasto.map((categoria) => (
-                      <ListGroup.Item
-                        key={categoria._id}
-                        onClick={() => {
-                          handleCategoriaGastoSelect(categoria);
-                          setCurrentGasto({ ...currentGasto, categoriaDetalles: categoria });
-                          handleCategoriaChange({ target: { value: '' } }); // Borrar listado
-                        }}
-                      >
-                        {categoria.nombre}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                )}
               </Form.Group>
               <Form.Group controlId="subCategoria">
                 <Form.Label hidden>Id subCategoría</Form.Label>

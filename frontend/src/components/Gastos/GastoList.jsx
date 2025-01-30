@@ -32,7 +32,7 @@ const GastosList = () => {
   const handleShowModal = (gasto) => {
     if(!gasto){
       setTipoModal('Ingreso')
-      setCurrentGasto({ categoriaDetalles : "", subCategoriaDetalles: "", descripcion: "", valor: 0 })
+      setCurrentGasto({ subCategoriaDetalles: "", descripcion: "", valor: 0 })
     }else{
       setTipoModal('Editar')
       setCurrentGasto(gasto);
