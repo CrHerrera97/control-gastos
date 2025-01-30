@@ -30,18 +30,19 @@ const useGastos = () => {
     const [ anio, setAnio ] = useState(obtenerAnioYmesActual().anio)
     const [ mes, setMes ] = useState(obtenerAnioYmesActual().mes)
 
+    const loadGastos = async () => {
+        try {
+            const data = await fetchGastos(paginacion,mes,anio); 
+            // El estado de gasto va a ser el ingreso al objeto data y al obj gastos
+            setGastos(data.gastos);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(()=>{
-        const loadGastos = async () => {
-            try {
-                const data = await fetchGastos(paginacion,mes,anio); 
-                // El estado de gasto va a ser el ingreso al objeto data y al obj gastos
-                setGastos(data.gastos);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
         loadGastos();
     }, [ paginacion, anio, mes ]);
 
@@ -57,11 +58,12 @@ const useGastos = () => {
             valor
         }
         
-        setLoading(true);
+        //setLoading(true);
         
         try {
-            const newGasto = await createGasto(newObject);
-            setGastos((prevGastos) => [...prevGastos, newGasto]);
+            await createGasto(newObject);
+            //setGastos([...gastos, newGasto]);
+            loadGastos()
         } catch (error) {
             setError(error.message);
         } finally {
@@ -82,11 +84,12 @@ const useGastos = () => {
             valor
         }
         
-        setLoading(true);
+        //setLoading(true);
         
         try {
-            const newGasto = await editGasto(newObject);
-            setGastos((prevGastos) => [...prevGastos, newGasto]);
+            await editGasto(newObject);
+            //setGastos((prevGastos) => [...prevGastos, newGasto]);
+            loadGastos()
         } catch (error) {
             setError(error.message);
         } finally {
@@ -97,11 +100,12 @@ const useGastos = () => {
     // Eliminar
 
     const eliminarGasto = async (gasto) => {
-        setLoading(true);
+        //setLoading(true);
         
         try {
-            const borrarGasto = await deleteGasto(gasto);
-            setGastos((prevGastos) => [...prevGastos, borrarGasto]);
+            await deleteGasto(gasto);
+            //setGastos((prevGastos) => [...prevGastos, borrarGasto]);
+            loadGastos();
         } catch (error) {
             setError(error.message);
         } finally {
