@@ -62,7 +62,6 @@ const useGastos = () => {
         
         try {
             await createGasto(newObject);
-            //setGastos([...gastos, newGasto]);
             loadGastos()
         } catch (error) {
             setError(error.message);
@@ -88,7 +87,6 @@ const useGastos = () => {
         
         try {
             await editGasto(newObject);
-            //setGastos((prevGastos) => [...prevGastos, newGasto]);
             loadGastos()
         } catch (error) {
             setError(error.message);
@@ -100,11 +98,8 @@ const useGastos = () => {
     // Eliminar
 
     const eliminarGasto = async (gasto) => {
-        //setLoading(true);
-        
         try {
             await deleteGasto(gasto);
-            //setGastos((prevGastos) => [...prevGastos, borrarGasto]);
             loadGastos();
         } catch (error) {
             setError(error.message);
