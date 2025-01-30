@@ -12,9 +12,32 @@ const obtenerSubCategoriasGasto = async (req,res) => {
     if(!nombre){
         subCategoriasGasto = await SubCategoriaGasto.find();
     }else{
-        subCategoriasGasto = await SubCategoriaGasto.find({
-            nombre: { $regex: nombre, $options: 'i' }
-        });
+        subCategoriasGasto = await SubCategoriaGasto.aggregate([
+            {
+                $match: {
+                    estado: true,
+                    nombre: { $regex: nombre, $options: 'i' }
+                }
+            },
+            {
+                $lookup: {
+                    from: "categoriagastos",
+                    localField: "categoria",
+                    foreignField: "_id",
+                    as: "categoriaDetalles"
+                }
+            },
+            { $unwind: "$categoriaDetalles" },
+            {
+                $project: {
+                    _id: 1,
+                    "categoriaDetalles._id": 1,
+                    "categoriaDetalles.nombre": 1,
+                    nombre: 1,
+                    creadoEn: 1
+                }
+            }
+        ]);
     }
     res.status(200).json({
         subCategoriasGasto
