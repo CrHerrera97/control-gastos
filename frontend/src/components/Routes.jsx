@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import IngresoList from "./IngresoList";
 import DashBoard from "./DashBoard";
 import GastosList from "./Gastos/GastoList";
+import Dash from "./dash";
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,9 @@ const AppRoutes = () => {
       </div>} />
       <Route path="/gastos" element={<div>
         <GastosList/>
+      </div>} />
+      <Route path="/dash" element={<div>
+        <Dash/>
       </div>} />
     </Routes>
   );

@@ -19,7 +19,7 @@ const MyNavbar = () => {
               <NavDropdown.Item href="#">Categorias Gastos</NavDropdown.Item>
               <NavDropdown.Item href="#">Sub Categorias Gastos</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/">Reportes</Nav.Link>
+            <Nav.Link href="/dash">Reportes</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link href="#login">Login</Nav.Link>
