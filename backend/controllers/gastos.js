@@ -13,7 +13,7 @@ const obtenerGastos = async (req, res) => {
     const skip = parseInt(desde, 10) * limit;
 
     const fechaInicio = new Date(anio, mes - 1, 1);
-    const fechaFin = new Date(anio, mes, 0);
+    const fechaFin = new Date(anio, mes, 1);
 
     const gastos = await Gasto.aggregate([
         {
