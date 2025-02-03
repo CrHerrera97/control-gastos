@@ -55,6 +55,7 @@ const obtenerGastos = async (req, res) => {
                 creadoEn: 1
             }
         },
+        { $sort: { creadoEn: -1 } },
         { $skip: skip },
         { $limit: limit }
     ]);
