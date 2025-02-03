@@ -114,7 +114,11 @@ const GastosList = () => {
   }
 
   const restarPaginacion = () => {
-    setPaginacion(paginacion-1)
+    if(paginacion <= 0){
+      setPaginacion(0)
+    }else{
+      setPaginacion(paginacion-1)
+    }
   }
 
   // Manejador anio
@@ -133,7 +137,7 @@ const GastosList = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-      <div className="container mt-5">
+      <div className="container mt-3">
         <div className="d-flex flex-column align-items-start mb-2">
           <h3 className="mb-0">Gastos</h3>
           <div className="d-flex justify-content-between align-items-center my-2 w-100">
