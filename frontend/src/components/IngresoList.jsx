@@ -309,7 +309,7 @@ const IngresoList = () => {
         </tbody>
       </Table>
       {/* Crear paginacion */}
-        <div className="d-flex justify-content-start my-1">
+        <div className="d-flex justify-content-start my-3">
           <Button variant="primary" className="mx-2" onClick={() => { restarPaginacion(paginacion) }}>Anterior</Button>
           <Button variant="primary" className="mx-2" onClick={() => { sumarPaginacion() }}>Siguiente</Button>
         </div>
