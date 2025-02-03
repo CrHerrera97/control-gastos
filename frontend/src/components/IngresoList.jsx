@@ -244,7 +244,7 @@ const IngresoList = () => {
   };
   
   return (
-    <div className="container mt-3">
+    <div className="container mt-2">
       <div className="d-flex flex-column align-items-start mb-2">
         <h3 className="mb-0">Ingresos</h3>
         <div className="d-flex justify-content-between align-items-center my-2 w-100">
@@ -309,7 +309,7 @@ const IngresoList = () => {
         </tbody>
       </Table>
       {/* Crear paginacion */}
-        <div className="d-flex justify-content-start my-3">
+        <div className="d-flex justify-content-start my-1">
           <Button variant="primary" className="mx-2" onClick={() => { restarPaginacion(paginacion) }}>Anterior</Button>
           <Button variant="primary" className="mx-2" onClick={() => { sumarPaginacion() }}>Siguiente</Button>
         </div>
