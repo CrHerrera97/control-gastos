@@ -338,7 +338,7 @@ const obtenerTopCategoria = async (req,res = response) => {
                 }
             },
             { $sort: { totalGastos: -1 } },
-            { $limit: 5 },
+            { $limit: 10 },
             {
                 $lookup: {
                     from: "categoriagastos", 
