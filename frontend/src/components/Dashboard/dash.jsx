@@ -17,12 +17,22 @@ const Dash = () => {
         const chartData = {
             type: 'bar',
             data: {
-                labels: nombres,
-                datasets: [{
-                    label: 'Total Gastado',
-                    data: valores,
-                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff']
-                }]
+            labels: nombres,
+            datasets: [{
+                label: 'Total Gastado',
+                data: valores,
+                backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff']
+            }]
+            },
+            options: {
+            scales: {
+                x: {
+                display: false
+                },
+                y: {
+                display: false
+                }
+            }
             }
         };
 
@@ -50,9 +60,6 @@ const Dash = () => {
             </div>
             <h3>Gatos por categoria</h3>
             <canvas ref={chartRef}></canvas>
-
-            <h3>Gatos por Subcategoria</h3>
-            {/*<canvas ref={chartRef}></canvas>*/}
         </div>
     );
 };
