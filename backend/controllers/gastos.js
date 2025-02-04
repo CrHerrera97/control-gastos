@@ -313,4 +313,110 @@ const obtenerGastosPorSubCategoria = async (req, res) => {
     }
 }
 
-module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria }
+const obtenerTopCategoria = async (req,res = response) => {
+
+    const { anio, mes } = req.query;
+
+    const fechaInicio = new Date(anio, mes - 1, 1);
+    const fechaFin = new Date(anio, mes, 1);
+
+    try {
+        const result = await Gasto.aggregate([
+            {
+                $match: {
+                    creadoEn: {
+                        $gte: fechaInicio,
+                        $lt: fechaFin
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$categoria", 
+                    totalGastos: { $sum: "$valor" },
+                    cantidad: { $sum: 1}
+                }
+            },
+            { $sort: { totalGastos: -1 } },
+            { $limit: 5 },
+            {
+                $lookup: {
+                    from: "categoriagastos", 
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "categoriaDetalles"
+                }
+            },
+            { $unwind: "$categoriaDetalles" },
+            {
+                $project: {
+                    _id: 1,
+                    totalGastos: 1,
+                    cantidad : 1,
+                    "categoriaDetalles.nombre": 1
+                }
+            }
+        ])
+
+        res.status(200).json({
+            result
+        })
+    } catch (error) {
+        
+    }
+}
+
+const obtenerTopSubCategoria = async (req,res = response) => {
+
+    const { anio, mes } = req.query;
+
+    const fechaInicio = new Date(anio, mes - 1, 1);
+    const fechaFin = new Date(anio, mes, 1);
+
+    try {
+        const result = await Gasto.aggregate([
+            {
+                $match: {
+                    creadoEn: {
+                        $gte: fechaInicio,
+                        $lt: fechaFin
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$subCategoria", 
+                    totalGastos: { $sum: "$valor" },
+                    cantidad: { $sum: 1}
+                }
+            },
+            { $sort: { totalGastos: -1 } },
+            { $limit: 10 },
+            {
+                $lookup: {
+                    from: "subcategoriagastos", 
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "subCategoriaDetalles"
+                }
+            },
+            { $unwind: "$subCategoriaDetalles" },
+            {
+                $project: {
+                    _id: 1,
+                    totalGastos: 1,
+                    cantidad : 1,
+                    "subCategoriaDetalles.nombre": 1
+                }
+            }
+        ])
+
+        res.status(200).json({
+            result
+        })
+    } catch (error) {
+        
+    }
+}
+
+module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria, obtenerTopCategoria, obtenerTopSubCategoria }
