@@ -5,7 +5,7 @@ import useDashboard from '../../hooks/gastos/useDashboard';
 Chart.register(...registerables);
 
 const Dash = () => {
-    const { topCategoria } = useDashboard();
+    const { topCategoria, saldoActual, ingresosTotales } = useDashboard();
     const chartRef = useRef(null);
 
     useEffect(() => {
@@ -47,11 +47,11 @@ const Dash = () => {
             <div className="cards-container">
                 <div className="card">
                     <h3>Balance Actual</h3>
-                    <p>₡ 500,000</p>
+                    <p>{`$ ${saldoActual}`}</p>
                 </div>
                 <div className="card">
                     <h3>Ingresos Totales</h3>
-                    <p>₡ 1,000,000</p>
+                    <p>{`$ ${ingresosTotales}`}</p>
                 </div>
                 <div className="card">
                     <h3>Gastos Totales</h3>
