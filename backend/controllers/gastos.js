@@ -102,6 +102,11 @@ const obtenerSaldo = async(req,res)=>{
     // Obtenemos todos los ingresos
     const ingresos = await Ingreso.aggregate([
         {
+            $match: {
+                estado: true
+            }
+        },
+        {
             $group: {
                 _id: null,
                 totalValor: { $sum: "$valor" }
