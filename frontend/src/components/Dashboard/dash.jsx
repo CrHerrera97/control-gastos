@@ -46,10 +46,10 @@ const Dash = () => {
     }, [topCategoria]);
 
     return (
-        <div className='container mt-2'>
-            <div className="d-flex flex-column align-items-start mb-2">
-                <h3 className="mb-0">Reportes</h3>
-                <div className="d-flex justify-content-between align-items-center my-2 w-100">
+        <div className='container mt-4'>
+            <div className="d-flex flex-column align-items-start mb-4">
+                <h3 className="mb-3">Reportes</h3>
+                <div className="d-flex justify-content-between align-items-center w-100">
                     <Form.Control
                         type="text"
                         placeholder="Año"
@@ -59,7 +59,7 @@ const Dash = () => {
                     <Form.Select
                         aria-label="Seleccionar mes"
                         style={selectStyleMesesReport}
-                        className="ms-2"
+                        className="ms-3"
                     >
                         <option value="1">Enero</option>
                         <option value="2">Febrero</option>
@@ -76,21 +76,25 @@ const Dash = () => {
                     </Form.Select>
                 </div>
             </div>
-            <div className="cards-container">
-                <div className="card">
+            
+            <div className="cards-container mb-4">
+                <div className="card mb-3">
                     <h3>Balance Actual</h3>
                     <p>{`$ ${saldoActual}`}</p>
                 </div>
-                <div className="card">
+                
+                <div className="card mb-3">
                     <h3>Ingresos Totales</h3>
                     <p>{`$ ${ingresosTotales}`}</p>
                 </div>
-                <div className="card">
+                
+                <div className="card mb-3">
                     <h3>Gastos Totales</h3>
                     <p>₡ 500,000</p>
                 </div>
             </div>
-            <h3>Gastos por categoria</h3>
+            
+            <h3 className="mb-3">Gastos por categoria</h3>
             <canvas ref={chartRef}></canvas>
         </div>
     );

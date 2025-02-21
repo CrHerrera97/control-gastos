@@ -35,6 +35,14 @@ const useDashboard = () => {
         }  
     }
 
+    const obtenerGastosTotalesPorMes = () => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
     
     useEffect(()=>{
         obtenerTopCategoria();
