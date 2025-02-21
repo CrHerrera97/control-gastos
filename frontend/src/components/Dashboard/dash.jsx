@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import useDashboard from '../../hooks/gastos/useDashboard';
 
+import { Modal, Form, Button, ListGroup } from 'react-bootstrap';
+
+import { selectStyleMesesReport, selectStyleAnioReport } from '../../common/dataEstilos';
+
 Chart.register(...registerables);
 
 const Dash = () => {
@@ -42,8 +46,36 @@ const Dash = () => {
     }, [topCategoria]);
 
     return (
-        <div>
-            <div>Separador mes y año</div>
+        <div className='container mt-2'>
+            <div className="d-flex flex-column align-items-start mb-2">
+                <h3 className="mb-0">Reportes</h3>
+                <div className="d-flex justify-content-between align-items-center my-2 w-100">
+                    <Form.Control
+                        type="text"
+                        placeholder="Año"
+                        className="ms-auto"
+                        style={selectStyleAnioReport}
+                    />
+                    <Form.Select
+                        aria-label="Seleccionar mes"
+                        style={selectStyleMesesReport}
+                        className="ms-2"
+                    >
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </Form.Select>
+                </div>
+            </div>
             <div className="cards-container">
                 <div className="card">
                     <h3>Balance Actual</h3>
@@ -58,7 +90,7 @@ const Dash = () => {
                     <p>₡ 500,000</p>
                 </div>
             </div>
-            <h3>Gatos por categoria</h3>
+            <h3>Gastos por categoria</h3>
             <canvas ref={chartRef}></canvas>
         </div>
     );
