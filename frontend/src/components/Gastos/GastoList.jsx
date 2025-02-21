@@ -192,7 +192,7 @@ const GastosList = () => {
               <tr key={gasto._id}>
                 <td>{gasto.categoriaDetalles?.nombre || '-'}</td>
                 <td>{gasto.subCategoriaDetalles?.nombre || '-'}</td>
-                <td>{gasto.descripcion || '-'}</td>
+                <td>{(gasto.descripcion?.slice(0, 28) || '-') + (gasto.descripcion?.length > 28 ? '...' : '')}</td>
                 <td>{gasto.valor}</td>
                 <td>{new Date(gasto.creadoEn).toLocaleString()}</td>
                 <td>
