@@ -93,24 +93,31 @@ const Dash = () => {
             </div>
             
             <div className="cards-container mb-4">
-                <div className="card mb-3">
-                    <h3>Balance Actual</h3>
-                    <p>{`$ ${saldoActual}`}</p>
+                
+                <div className="card mb-3 p-3 shadow-sm">
+                    <h4 className="card-title">Balance Actual</h4>
+                    <p className="card-text">{`$ ${saldoActual}`}</p>
                 </div>
                 
-                <div className="card mb-3">
-                    <h3>Ingresos Totales</h3>
-                    <p>{`$ ${ingresosTotales}`}</p>
+                <div className="card mb-3 p-3 shadow-sm">
+                    <h4 className="card-title">Ingresos</h4>
+                    <div className="d-flex justify-content-between">
+                        <p className="card-text">{`Totales: $ ${ingresosTotales}`}</p>
+                        <p className="card-text">{`Mes: $ ${ingresosTotales}`}</p>
+                    </div>
                 </div>
-                
-                <div className="card mb-3">
-                    <h3>Gastos Totales</h3>
-                    <p>₡ 500,000</p>
+
+                <div className="card mb-3 p-3 shadow-sm">
+                    <h4 className="card-title">Gastos</h4>
+                    <div className="d-flex justify-content-between">
+                        <p className="card-text">{`Totales: $ ${ingresosTotales}`}</p>
+                        <p className="card-text">{`Mes: $ ${ingresosTotales}`}</p>
+                    </div>
                 </div>
             </div>
             
             <h3 className="mb-3">Gastos por categoria</h3>
-            <canvas ref={chartRef}></canvas>
+            <canvas ref={chartRef} className="shadow-sm p-3 mb-5 bg-white rounded"></canvas>
         </div>
     );
 };
