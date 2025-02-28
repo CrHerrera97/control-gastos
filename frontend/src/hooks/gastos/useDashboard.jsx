@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 
-import { fetchTopGastosCategoria, fetchSaldoActual, fetchIngresosTotales } from "../../services/dashboard/dashboardService";
+import { fetchTopGastosCategoria, fetchSaldoActual, fetchIngresosTotales, fetchGastosTotales, fetchIngresosTotalesMes } from "../../services/dashboard/dashboardService";
 
 const useDashboard = () => {
 
     const [ topCategoria, setTopCategoria ] = useState([])
     const [ saldoActual, setSaldoActual ] = useState(0)
     const [ ingresosTotales, setIngresosTotales ] = useState(0)
+
+    const [ gastosTotales, setGastosTotales ] = useState(0)
+
+    const [ ingresosTotalesMes, setIngresosTotalesMes ] = useState(0)
 
     // Estado mes y año
 
@@ -49,9 +53,19 @@ const useDashboard = () => {
         }  
     }
 
-    const obtenerGastosTotalesPorMes = () => {
+    const obtenerGastosTotales = async() => {
         try {
+            const data = await fetchGastosTotales();
+            setGastosTotales(data.valorTotal)
+        } catch (error) {
             
+        }  
+    }
+
+    const obtenerGastosTotalesPorMes = async () => {
+        try {
+            const data = await fetchIngresosTotalesMes(mes,anio);
+            setIngresosTotalesMes(data.valorTotal)
         } catch (error) {
             
         }
@@ -62,10 +76,12 @@ const useDashboard = () => {
         obtenerTopCategoria();
         obtenerSaldoActual();
         obtenerIngresosTotales();
+        obtenerGastosTotalesPorMes();
+        obtenerGastosTotales();
     },[anio,mes])
     
     return {
-        topCategoria, saldoActual, ingresosTotales, mes, setMes, anio, setAnio
+        topCategoria, saldoActual, ingresosTotales, gastosTotales, ingresosTotalesMes, mes, setMes, anio, setAnio
     }
 }
 

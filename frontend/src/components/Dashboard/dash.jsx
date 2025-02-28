@@ -9,7 +9,7 @@ import { selectStyleMesesReport, selectStyleAnioReport } from '../../common/data
 Chart.register(...registerables);
 
 const Dash = () => {
-    const { topCategoria, saldoActual, ingresosTotales, mes, setMes, anio, setAnio } = useDashboard();
+    const { topCategoria, saldoActual, ingresosTotales, gastosTotales, ingresosTotalesMes, mes, setMes, anio, setAnio } = useDashboard();
     const chartRef = useRef(null);
 
     // Manejador anio
@@ -93,7 +93,7 @@ const Dash = () => {
             </div>
             
             <div className="cards-container mb-4">
-                
+
                 <div className="card mb-3 p-3 shadow-sm">
                     <h4 className="card-title">Balance Actual</h4>
                     <p className="card-text">{`$ ${saldoActual}`}</p>
@@ -103,14 +103,14 @@ const Dash = () => {
                     <h4 className="card-title">Ingresos</h4>
                     <div className="d-flex justify-content-between">
                         <p className="card-text">{`Totales: $ ${ingresosTotales}`}</p>
-                        <p className="card-text">{`Mes: $ ${ingresosTotales}`}</p>
+                        <p className="card-text">{`Mes: $ ${ingresosTotalesMes}`}</p>
                     </div>
                 </div>
 
                 <div className="card mb-3 p-3 shadow-sm">
                     <h4 className="card-title">Gastos</h4>
                     <div className="d-flex justify-content-between">
-                        <p className="card-text">{`Totales: $ ${ingresosTotales}`}</p>
+                        <p className="card-text">{`Totales: $ ${gastosTotales}`}</p>
                         <p className="card-text">{`Mes: $ ${ingresosTotales}`}</p>
                     </div>
                 </div>
