@@ -76,6 +76,45 @@ const obtenerIngresosTotales = async (req, res) => {
     }
 }
 
+
+const obtenerIngresosTotalesMes = async (req, res) => {
+
+    const { anio, mes } = req.query;
+
+    const fechaInicio = new Date(anio, mes - 1, 1);
+    const fechaFin = new Date(anio, mes, 1);
+
+    const ingresoPorMes = await Ingreso.aggregate([
+        {
+            $match : {
+                estado : true,
+                creadoEn: {
+                    $gte : fechaInicio,
+                    $lt: fechaFin
+                }
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalValor: { $sum: "$valor" }
+            }
+        }
+    ])
+
+    if (ingresoPorMes.length > 0) {
+        const total = ingresoPorMes[0].totalValor;
+        res.status(200).json({
+            valorTotal: total
+        });
+    } else {
+        res.status(200).json({
+            valorTotal: 0
+        });
+    }
+}
+
+
 const crearIngreso = async (req,res) => {
 
     const categoria = req.body.categoria;
@@ -117,4 +156,4 @@ const borrarIngreso = async (req,res) => {
     res.status(200).json(ingreso);
 }
 
-module.exports = { obtenerIngresos, obtenerIngreso, obtenerIngresosTotales, crearIngreso, editarIngreso, borrarIngreso }
+module.exports = { obtenerIngresos, obtenerIngreso, obtenerIngresosTotales, obtenerIngresosTotalesMes, crearIngreso, editarIngreso, borrarIngreso }

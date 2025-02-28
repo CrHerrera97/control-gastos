@@ -80,6 +80,41 @@ const obtenerGasto = async (req,res) => {
     })
 }
 
+const obtenerGastosTotales = async (req, res) => {
+
+    try {
+        const sumTotal = await Gasto.aggregate([
+            {
+                $match: {
+                    estado: true
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalValor: { $sum: "$valor" }
+                }
+            }
+        ]);
+        
+        if (sumTotal.length > 0) {
+            const total = sumTotal[0].totalValor;
+            res.status(200).json({
+                valorTotal: total
+            });
+        } else {
+            res.status(200).json({
+                valorTotal: 0
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            msg: 'Error',
+            error: err.message
+        });
+    }
+}
+
 const editarGasto = async (req,res) => {
 
     const { id } = req.params;
@@ -424,4 +459,4 @@ const obtenerTopSubCategoria = async (req,res = response) => {
     }
 }
 
-module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, crearGasto, editarGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria, obtenerTopCategoria, obtenerTopSubCategoria }
+module.exports = { obtenerGastos, obtenerGasto, obtenerSaldo, obtenerGastosTotales, crearGasto, editarGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria, obtenerTopCategoria, obtenerTopSubCategoria }
