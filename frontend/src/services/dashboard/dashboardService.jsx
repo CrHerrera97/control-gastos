@@ -5,8 +5,8 @@ const port = import.meta.env.VITE_PORT;
 
 // Obtener reportes gastos
 
-export const fetchTopGastosCategoria = async () => {
-    const response = await fetch(`${url}:${port}/api/gastos/reportes/gastos/top-categoria?anio=2025&mes=2`)
+export const fetchTopGastosCategoria = async (mes,anio) => {
+    const response = await fetch(`${url}:${port}/api/gastos/reportes/gastos/top-categoria?anio=${anio}&mes=${mes}`)
     if(!response.ok) throw new Error('Error al obtener la categoria de los gastos');
     return await response.json()
 }

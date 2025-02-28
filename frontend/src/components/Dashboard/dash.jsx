@@ -9,8 +9,19 @@ import { selectStyleMesesReport, selectStyleAnioReport } from '../../common/data
 Chart.register(...registerables);
 
 const Dash = () => {
-    const { topCategoria, saldoActual, ingresosTotales } = useDashboard();
+    const { topCategoria, saldoActual, ingresosTotales, mes, setMes, anio, setAnio } = useDashboard();
     const chartRef = useRef(null);
+
+    // Manejador anio
+    const handleAnio = (event) => {
+        setAnio(event.target.value)
+    }
+    
+    // Manejado mes
+    
+    const handleMes = (event) => {
+        setMes(event.target.value)
+    }
 
     useEffect(() => {
         if (!chartRef.current || !topCategoria) return;
@@ -53,12 +64,16 @@ const Dash = () => {
                     <Form.Control
                         type="text"
                         placeholder="Año"
+                        value={anio}
                         className="ms-auto"
                         style={selectStyleAnioReport}
+                        onChange={handleAnio}
                     />
                     <Form.Select
                         aria-label="Seleccionar mes"
                         style={selectStyleMesesReport}
+                        value={mes}
+                        onChange={handleMes}
                         className="ms-3"
                     >
                         <option value="1">Enero</option>
