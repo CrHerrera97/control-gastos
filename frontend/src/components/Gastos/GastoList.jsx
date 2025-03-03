@@ -190,9 +190,9 @@ const GastosList = () => {
           <tbody>
             {gastos.map((gasto) => (
               <tr key={gasto._id}>
-                <td>{gasto.categoriaDetalles?.nombre || '-'}</td>
-                <td>{gasto.subCategoriaDetalles?.nombre || '-'}</td>
-                <td>{(gasto.descripcion?.slice(0, 28) || '-') + (gasto.descripcion?.length > 28 ? '...' : '')}</td>
+                <td>{(gasto.categoriaDetalles?.nombre?.slice(0, 12) || '-') + (gasto.categoriaDetalles?.nombre?.length > 12 ? '...' : '')}</td>
+                <td>{(gasto.subCategoriaDetalles?.nombre?.slice(0, 12) || '-') + (gasto.subCategoriaDetalles?.nombre?.length > 12 ? '...' : '')}</td>
+                <td>{(gasto.descripcion?.slice(0, 12) || '-') + (gasto.descripcion?.length > 12 ? '...' : '')}</td>
                 <td>{gasto.valor}</td>
                 <td>{new Date(gasto.creadoEn).toLocaleString()}</td>
                 <td>
