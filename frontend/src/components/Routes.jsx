@@ -10,8 +10,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<div>
-        <h3>Dashboard</h3>
-        <DashBoard />
+        <Dash/>
       </div>} />
       <Route path="/ingresos" element={<div>
         <IngresoList />
