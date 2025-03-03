@@ -9,7 +9,7 @@ import { selectStyleMesesReport, selectStyleAnioReport } from '../../common/data
 Chart.register(...registerables);
 
 const Dash = () => {
-    const { topCategoria, saldoActual, ingresosTotales, gastosTotales, ingresosTotalesMes, mes, setMes, anio, setAnio } = useDashboard();
+    const { topCategoria, saldoActual, ingresosTotales, gastosTotales, gastosTotalesMes, ingresosTotalesMes, mes, setMes, anio, setAnio } = useDashboard();
     const chartRef = useRef(null);
 
     // Manejador anio
@@ -111,7 +111,7 @@ const Dash = () => {
                     <h4 className="card-title">Gastos</h4>
                     <div className="d-flex justify-content-between">
                         <p className="card-text">{`Totales: $ ${gastosTotales}`}</p>
-                        <p className="card-text">{`Mes: $ ${ingresosTotales}`}</p>
+                        <p className="card-text">{`Mes: $ ${gastosTotalesMes}`}</p>
                     </div>
                 </div>
             </div>

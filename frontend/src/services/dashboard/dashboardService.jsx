@@ -29,6 +29,12 @@ export const fetchGastosTotales = async () => {
     return await response.json()
 }
 
+export const fetchGastosTotalesMes = async (mes,anio) => {
+    const response = await fetch(`${url}:${port}/api/gastos/total/amount/mes?anio=${anio}&mes=${mes}`)
+    if(!response.ok) throw new Error('Error al obtener el ingreso');
+    return await response.json()
+}
+
 export const fetchIngresosTotalesMes = async (mes,anio) => {
     const response = await fetch(`${url}:${port}/api/ingresos/total/mes?anio=${anio}&mes=${mes}`)
     if(!response.ok) throw new Error('Error al obtener el ingreso');
