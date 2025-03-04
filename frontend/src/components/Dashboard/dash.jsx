@@ -96,22 +96,22 @@ const Dash = () => {
 
                 <div className="card mb-3 p-3 shadow-sm">
                     <h4 className="card-title">Balance Actual</h4>
-                    <p className="card-text">{`$ ${saldoActual}`}</p>
+                    <p className="card-text">{`$ ${saldoActual.toLocaleString('es-CO')}`}</p>
                 </div>
                 
                 <div className="card mb-3 p-3 shadow-sm">
                     <h4 className="card-title">Ingresos</h4>
                     <div className="d-flex justify-content-between">
-                        <p className="card-text">{`Totales: $ ${ingresosTotales}`}</p>
-                        <p className="card-text">{`Mes: $ ${ingresosTotalesMes}`}</p>
+                        <p className="card-text">{`Totales: $ ${ingresosTotales.toLocaleString('es-CO')}`}</p>
+                        <p className="card-text">{`Mes: $ ${ingresosTotalesMes.toLocaleString('es-CO')}`}</p>
                     </div>
                 </div>
 
                 <div className="card mb-3 p-3 shadow-sm">
                     <h4 className="card-title">Gastos</h4>
                     <div className="d-flex justify-content-between">
-                        <p className="card-text">{`Totales: $ ${gastosTotales}`}</p>
-                        <p className="card-text">{`Mes: $ ${gastosTotalesMes}`}</p>
+                        <p className="card-text">{`Totales: $ ${gastosTotales.toLocaleString('es-CO')}`}</p>
+                        <p className="card-text">{`Mes: $ ${gastosTotalesMes.toLocaleString('es-CO')}`}</p>
                     </div>
                 </div>
             </div>

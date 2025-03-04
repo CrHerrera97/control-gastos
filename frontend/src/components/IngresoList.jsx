@@ -297,9 +297,9 @@ const IngresoList = () => {
           {ingresos.map((ingreso) => (
             <tr key={ingreso._id}>
               <td>{ingreso.categoria.nombre}</td>
-              <td>{ingreso.valor}</td>
+              <td>{ingreso.valor.toLocaleString('es-CO')}</td>
               <td>{ingreso.estado ? 'Activo' : 'Inactivo'}</td>
-              <td>{new Date(ingreso.creadoEn).toLocaleString()}</td>
+              <td>{new Date(ingreso.creadoEn).toLocaleDateString('es-CO')}</td>
               <td>
                 <Button variant="primary" className="btn-sm mx-2" onClick={() => handleShow(ingreso)}>Editar</Button>
                 <Button variant="danger" className="btn-sm mx-2" onClick={() => handleShowDelete(ingreso._id)}>Eliminar</Button>

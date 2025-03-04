@@ -193,8 +193,8 @@ const GastosList = () => {
                 <td>{(gasto.categoriaDetalles?.nombre?.slice(0, 12) || '-') + (gasto.categoriaDetalles?.nombre?.length > 12 ? '...' : '')}</td>
                 <td>{(gasto.subCategoriaDetalles?.nombre?.slice(0, 12) || '-') + (gasto.subCategoriaDetalles?.nombre?.length > 12 ? '...' : '')}</td>
                 <td>{(gasto.descripcion?.slice(0, 12) || '-') + (gasto.descripcion?.length > 12 ? '...' : '')}</td>
-                <td>{gasto.valor}</td>
-                <td>{new Date(gasto.creadoEn).toLocaleString()}</td>
+                <td>{gasto.valor.toLocaleString('es-CO')}</td>
+                <td>{new Date(gasto.creadoEn).toLocaleDateString('es-CO')}</td>
                 <td>
                   <Button variant="primary" className="btn-sm mx-2" onClick={()=> handleShowModal(gasto)}>Editar</Button>
                   <Button variant="danger" className="btn-sm mx-2" onClick={()=> handleShowDelete(gasto._id)}>Eliminar</Button>

@@ -22,8 +22,7 @@ const MyNavbar = () => {
             <Nav.Link href="/dash">Reportes</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#login">Login</Nav.Link>
-            <Nav.Link href="#signup">Sign Up</Nav.Link>
+            <Nav.Link href="#signup">Cerrar Sesión</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
