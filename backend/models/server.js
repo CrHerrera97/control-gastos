@@ -10,6 +10,8 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.apiPaths = {
+            auth: '/api/auth',
+            usuarios: '/api/usuarios',
             ingresos : '/api/ingresos',
             categoriasIngresos : '/api/categorias-ingresos',
             gastos : '/api/gastos',
@@ -42,6 +44,8 @@ class Server {
     }
 
     routes(){
+        this.app.use(this.apiPaths.auth, require('../routes/auth'))
+        this.app.use(this.apiPaths.usuarios, require('../routes/usuarios'))
         this.app.use(this.apiPaths.ingresos, require('../routes/ingresos'));
         this.app.use(this.apiPaths.categoriasIngresos, require('../routes/categoriaIngresos'));
         this.app.use(this.apiPaths.gastos, require('../routes/gastos'));
