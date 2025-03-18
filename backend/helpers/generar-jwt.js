@@ -11,7 +11,7 @@ const generarJwt = (uid = '')=>{
         const payLoad = { uid }
 
         jwt.sign(payLoad,process.env.SECRETOPRIVATEKEY,{
-            expiresIn : '4h'
+            expiresIn : '365d'
         },(err,token)=>{
             if(err){
                 console.log(err)
