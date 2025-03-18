@@ -1,37 +1,62 @@
 const { Router } = require('express');
 
+const { validarJwt } = require('../middlewares/validar-jwt')
+const { validarCampos } = require('../middlewares/validar-campos')
+
+const { check } = require("express-validator");
+
 const { obtenerGastos, obtenerGasto, editarGasto, obtenerSaldo, obtenerGastosTotales, obtenerGastosTotalesMes, crearGasto, editarCategoriaGasto, borrarCategoriaGasto, obtenerGastosPorCategoria, obtenerGastosPorSubCategoria, obtenerTopCategoria, obtenerTopSubCategoria } = require('../controllers/gastos')
 
 const router = Router();
 
-router.get('/', obtenerGastos);
 
-router.get('/:id', obtenerGasto);
+/* El validar campos funciona con el express validator con datos que obtiene a través del requiere
+con el check*/
+router.get('/', [ validarJwt ], obtenerGastos);
 
-router.get('/total/amount', obtenerGastosTotales)
+router.get('/:id', [ 
+    validarJwt,
+    check('id','no es un id valido').isMongoId(),
+    validarCampos
+], obtenerGasto);
 
-router.get('/total/amount/mes', obtenerGastosTotalesMes)
+router.get('/total/amount', [ validarJwt ],obtenerGastosTotales)
 
-router.get('/saldo/amount', obtenerSaldo);
+router.get('/total/amount/mes', [ validarJwt ], obtenerGastosTotalesMes)
 
-router.put('/:id', editarGasto);
+router.get('/saldo/amount',[ validarJwt ], obtenerSaldo);
 
-router.post('/', crearGasto);
+router.put('/:id',[ 
+    validarJwt,
+    check('id','no es un id valido').isMongoId(),
+    check('categoria','no es un id valido').isMongoId(),
+    check('subCategoria','no es un id valido').isMongoId(),
+    validarCampos
+], editarGasto);
 
-router.put('/:id', editarCategoriaGasto);
+router.post('/', [
+    validarJwt,
+    check('categoria','no es un id valido').isMongoId(),
+    check('subCategoria','no es un id valido').isMongoId(),
+    validarCampos
+], crearGasto);
 
-router.delete('/:id', borrarCategoriaGasto);
+router.delete('/:id',[
+    validarJwt,
+    check('id','no es un id valido').isMongoId(),
+    validarCampos
+], borrarCategoriaGasto);
 
 // Reportes 
 
-router.get('/reportes/gastos/categoria', obtenerGastosPorCategoria);
+router.get('/reportes/gastos/categoria',[ validarJwt ], obtenerGastosPorCategoria);
 
-router.get('/reportes/gastos/subcategoria', obtenerGastosPorSubCategoria);
+router.get('/reportes/gastos/subcategoria',[ validarJwt ], obtenerGastosPorSubCategoria);
 
 // Top 5 gastos por categoria
 
-router.get('/reportes/gastos/top-categoria',obtenerTopCategoria);
+router.get('/reportes/gastos/top-categoria',[ validarJwt ],obtenerTopCategoria);
 
-router.get('/reportes/gastos/top-subcategoria',obtenerTopSubCategoria);
+router.get('/reportes/gastos/top-subcategoria',[ validarJwt ],obtenerTopSubCategoria);
 
 module.exports = router;

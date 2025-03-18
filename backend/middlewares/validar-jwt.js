@@ -39,7 +39,7 @@ const validarJwt = async(req = request, res = response,next)=>{
                 msg: 'token no valido - usuario con estado false'
             })
         }
-        
+        // guardamos el usuario por si lo requerimos en otros endpoints
         req.usuario = usuario
         next();
         //req.usuario = await usuario.uid
