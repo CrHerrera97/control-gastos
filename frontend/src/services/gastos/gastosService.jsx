@@ -20,6 +20,7 @@ export const fetchGastos = async (paginacion,mes,anio) => {
     })
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
+    
 }
 
 // Crear un nuevo gasto
