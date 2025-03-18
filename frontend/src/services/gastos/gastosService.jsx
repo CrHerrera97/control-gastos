@@ -3,10 +3,21 @@
 const url = import.meta.env.VITE_API_URL;
 const port = import.meta.env.VITE_PORT;
 
+// La idea es que se consuma a través de un localstorage
+const tokenProvi = import.meta.env.VITE_TOKEN_PROVI;
+
+const headers = {
+    "Content-Type": "application/json",
+    "x-token": tokenProvi
+}
+
 // Obtener los gastos
 
 export const fetchGastos = async (paginacion,mes,anio) => {
-    const response = await fetch(`${url}:${port}/api/gastos?desde=${paginacion}&anio=${anio}&mes=${mes}`)
+    const response = await fetch(`${url}:${port}/api/gastos?desde=${paginacion}&anio=${anio}&mes=${mes}`,{
+        method: "GET",
+        headers
+    })
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
 }
