@@ -86,9 +86,21 @@ const IngresoList = () => {
   };
   
   const handleCloseDelete = () => setModalEliminar(false);
+
+  const tokenProvi = import.meta.env.VITE_TOKEN_PROVI;
+  // Headers para peticiones
+
+  const headers = {
+    "Content-Type": "application/json",
+    "x-token": tokenProvi
+}
+
   // Obtener ingresos
   useEffect(() => {
-    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}&anio=${anio}&mes=${mes}`)
+    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}&anio=${anio}&mes=${mes}`,{
+      method: "GET",
+      headers
+    })
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos);

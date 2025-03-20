@@ -27,9 +27,10 @@ export const fetchGastos = async (paginacion,mes,anio) => {
 export const createGasto = async (gasto) => {
     const response = await fetch(`${url}:${port}/api/gastos`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', "x-token": tokenProvi },
         body: JSON.stringify([gasto]),
     });
+    console.log(response)
     if (!response.ok) throw new Error('Error al crear el gasto');
     return await response.json();
 };
