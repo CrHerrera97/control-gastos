@@ -35,10 +35,7 @@ router.put('/:id',[
 ], editarGasto);
 
 router.post('/', [
-    validarJwt,
-    check('categoria','no es un id valido').isMongoId(),
-    check('subCategoria','no es un id valido').isMongoId(),
-    validarCampos
+    validarJwt
 ], crearGasto);
 
 router.delete('/:id',[
