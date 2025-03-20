@@ -27,7 +27,7 @@ export const fetchGastos = async (paginacion,mes,anio) => {
 export const createGasto = async (gasto) => {
     const response = await fetch(`${url}:${port}/api/gastos`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', "x-token": tokenProvi },
+        headers,
         body: JSON.stringify([gasto]),
     });
     console.log(response)
@@ -43,7 +43,7 @@ export const editGasto = async (gasto) => {
     const { id, ...gastoSinId } = gasto;
     const response = await fetch(`${url}:${port}/api/gastos/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(gastoSinId),
     });
     if (!response.ok) throw new Error('Error al crear el gasto');
@@ -55,7 +55,7 @@ export const deleteGasto = async (gasto) => {
 
     const response = await fetch(`${url}:${port}/api/gastos/${gasto}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
     });
     if (!response.ok) throw new Error('Error al eliminar el gasto');
     return await response.json();
@@ -64,7 +64,9 @@ export const deleteGasto = async (gasto) => {
 // Obtener id x un nombre de categoria gasto
 
 export const fetchCategoriaGasto = async (searchTerm) => {
-    const response = await fetch(`${url}:${port}/api/categoria-gastos?nombre=${searchTerm}`)
+    const response = await fetch(`${url}:${port}/api/categoria-gastos?nombre=${searchTerm}`,{
+        headers
+    })
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
 }
@@ -72,7 +74,9 @@ export const fetchCategoriaGasto = async (searchTerm) => {
 // Obtener id x un nombre de subcategoria gasto
 
 export const fetchSubCategoriaGasto = async (searchTerm) => {
-    const response = await fetch(`${url}:${port}/api/sub-categoria-gastos?nombre=${searchTerm}`)
+    const response = await fetch(`${url}:${port}/api/sub-categoria-gastos?nombre=${searchTerm}`,{
+        headers
+    })
     if(!response.ok) throw new Error('Error al obtener los gastos');
     return await response.json()
 }
