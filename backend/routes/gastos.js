@@ -27,11 +27,7 @@ router.get('/total/amount/mes', [ validarJwt ], obtenerGastosTotalesMes)
 router.get('/saldo/amount',[ validarJwt ], obtenerSaldo);
 
 router.put('/:id',[ 
-    validarJwt,
-    check('id','no es un id valido').isMongoId(),
-    check('categoria','no es un id valido').isMongoId(),
-    check('subCategoria','no es un id valido').isMongoId(),
-    validarCampos
+    validarJwt
 ], editarGasto);
 
 router.post('/', [
@@ -39,9 +35,7 @@ router.post('/', [
 ], crearGasto);
 
 router.delete('/:id',[
-    validarJwt,
-    check('id','no es un id valido').isMongoId(),
-    validarCampos
+    validarJwt
 ], borrarCategoriaGasto);
 
 // Reportes 

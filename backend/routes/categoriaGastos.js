@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const { check } = require('express-validator');
-
+const { validarJwt } = require('../middlewares/validar-jwt')
 const { validarCampos } = require('../middlewares/validar-campos')
 
 const { existeCategoriaGastoPorId } = require('../helpers/db-validators')  
@@ -10,7 +10,7 @@ const { obtenerCategoriasGasto, obtenerCategoriaGasto, crearCategoriaGasto, edit
 
 const router = Router();
 
-router.get('/', obtenerCategoriasGasto)
+router.get('/', [validarJwt],obtenerCategoriasGasto)
 
 router.get('/:id',[
     check('id','No es un id valido').isMongoId(),
