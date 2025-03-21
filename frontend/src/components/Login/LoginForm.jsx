@@ -1,21 +1,24 @@
 import useLogin from "../../hooks/gastos/auth/useLogin";
 
+import { useEffect } from "react";
+
 const LoginForm = () => {
     const { entrar, respuesta, error } = useLogin();
 
-    const login = async (event) => {
+    const login = (event) => {
         event.preventDefault();
         const correo = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const res = await entrar(correo, password);
+        entrar(correo, password);
+    };
 
-        console.log(respuesta.token);
-
+    useEffect(()=>{
         if (respuesta) {
+            console.log(respuesta);
             localStorage.setItem('x-token', respuesta.token);
             window.location.href = "/";
         }
-    };
+    },[respuesta])
 
     return (
         <div style={{
