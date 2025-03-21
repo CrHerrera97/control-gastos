@@ -21,6 +21,7 @@ const obtenerIngresos = async (req, res = response) => {
         path: 'categoria',
         select: '-descripcion -estado -creadoEn -__v'
     })
+    .sort({ creadoEn: -1 })
     .skip(skip)
     .limit(limit);
 
