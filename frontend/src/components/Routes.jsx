@@ -1,28 +1,42 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import IngresoList from "./IngresoList";
 import DashBoard from "./DashBoard";
 import GastosList from "./Gastos/GastoList";
 import Dash from "./Dashboard/dash";
+import LoginForm from "./Login/LoginForm";
+import MyNavbar from './navbar';
 
 const AppRoutes = () => {
+  const isLoginRoute = window.location.pathname === "/login";
+
   return (
-    <Routes>
-      <Route path="/" element={<div>
-        <Dash/>
-      </div>} />
-      <Route path="/ingresos" element={<div>
-        <IngresoList />
-      </div>} />
-      <Route path="/gastos" element={<div>
-        <GastosList/>
-      </div>} />
-      <Route path="/dash" element={<div>
-        <Dash/>
-      </div>} />
-    </Routes>
+    <>
+      {!isLoginRoute && <MyNavbar />}
+      <Routes>
+        <Route path="login" element={<div>
+          <LoginForm/>
+        </div>}/>
+        <Route path="/" element={<div>
+          <ProtegerRutas><Dash/></ProtegerRutas>
+        </div>} />
+        <Route path="/ingresos" element={<div>
+         <ProtegerRutas> <IngresoList/> </ProtegerRutas> </div>}/>
+        <Route path="/gastos" element={<div>
+          <ProtegerRutas> <GastosList/></ProtegerRutas>
+        </div>} />
+        <Route path="/dash" element={<div>
+          <ProtegerRutas> <Dash/></ProtegerRutas>
+        </div>} />
+      </Routes>
+    </>
   );
 };
+
+const ProtegerRutas = ({children}) =>{
+  const token = localStorage.getItem('x-token');
+  return token ? children : <Navigate to="/login" />;
+}
 
 export default AppRoutes;

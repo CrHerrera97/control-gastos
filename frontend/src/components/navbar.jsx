@@ -22,12 +22,17 @@ const MyNavbar = () => {
             <Nav.Link href="/dash">Reportes</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#signup">Cerrar Sesión</Nav.Link>
+            <Nav.Link href="#signup" onClick={cerrarSesion}>Cerrar Sesión</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 };
+
+const cerrarSesion = () => {
+  localStorage.removeItem('x-token');
+  window.location.href = "/login";
+}
 
 export default MyNavbar;
