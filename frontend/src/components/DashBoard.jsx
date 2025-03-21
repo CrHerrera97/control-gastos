@@ -8,10 +8,17 @@ const dashboard = () => {
     const [total, setTotal] = useState(1);
     const [saldo, setSaldo] = useState(1);
 
+    const headers = {
+        "Content-Type": "application/json",
+        "x-token": tokenProvi
+    }    
+
     useEffect(() => {
         const valorTotal = () => {
             // Llamado a el fetch
-            fetch(`${url}:${port}/api/ingresos/total/amount`)
+            fetch(`${url}:${port}/api/ingresos/total/amount`,{
+                headers
+            })
             .then((response)=> response.json())
             .then((total) => {
                 setTotal(total.valorTotal)
@@ -20,7 +27,9 @@ const dashboard = () => {
 
         const saldoActual = () => {
             // Llamado a el fetch
-            fetch(`${url}:${port}/api/gastos/saldo/amount`)
+            fetch(`${url}:${port}/api/gastos/saldo/amount`,{
+                headers
+            })
             .then((response)=> response.json())
             .then((saldo) => {
                 setSaldo(saldo.valorTotal)

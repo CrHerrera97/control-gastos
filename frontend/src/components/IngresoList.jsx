@@ -115,7 +115,9 @@ const IngresoList = () => {
   // Buscar categorías
   const fetchCategorias = async (searchTerm) => {
     try {
-      const response = await fetch(`${url}:${port}/api/categorias-ingresos?nombre=${searchTerm}`);
+      const response = await fetch(`${url}:${port}/api/categorias-ingresos?nombre=${searchTerm}`,{
+        headers
+      });
       const data = await response.json();
       setFilteredCategorias(data.categoriasIngreso || []);
     } catch (error) {
@@ -160,7 +162,9 @@ const IngresoList = () => {
 
   // Tener los registros actualizados
   const fetchIngresos = () => {
-    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}&anio=${anio}&mes=${mes}`)
+    fetch(`${url}:${port}/api/ingresos?desde=${paginacion}&anio=${anio}&mes=${mes}`,{
+      headers
+    })
       .then((response) => response.json())
       .then((data) => {
         setIngresos(data.ingresos); // Actualizar el estado de los ingresos
@@ -178,7 +182,7 @@ const IngresoList = () => {
       // Datos post
       const postOperaciones = {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' , 'x-token':tokenProvi},
         body: JSON.stringify({
           "categoria": currentIngreso.categoria._id,
           "valor": currentIngreso.valor,
@@ -205,7 +209,7 @@ const IngresoList = () => {
 
       const putOperaciones = {
         method: "PUT",
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-token':tokenProvi },
         body: JSON.stringify({
           "categoria": categoriaIngreso,
           "valor": valor,
@@ -231,7 +235,7 @@ const IngresoList = () => {
 
     const deleteOperaciones = {
       method: "DELETE",
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' , 'x-token':tokenProvi},
     };
 
     fetch(`${url}:${port}/api/ingresos/${id}`, deleteOperaciones)
