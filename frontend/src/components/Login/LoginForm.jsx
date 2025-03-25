@@ -3,22 +3,31 @@ import useLogin from "../../hooks/gastos/auth/useLogin";
 import { useEffect } from "react";
 
 const LoginForm = () => {
-    const { entrar, respuesta, error } = useLogin();
+    const { entrar, respuesta, error, setError } = useLogin();
+
 
     const login = (event) => {
         event.preventDefault();
         const correo = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        entrar(correo, password);
+
+        if (!correo || !password) {
+            alert('Debe llenar los campos');
+        } else {
+            entrar(correo, password);
+        }
     };
 
     useEffect(()=>{
         if (respuesta) {
-            console.log(respuesta);
             localStorage.setItem('x-token', respuesta.token);
             window.location.href = "/";
         }
-    },[respuesta])
+        if (error) {
+            alert(error);
+            setError(null);
+        }
+    },[respuesta, error])
 
     return (
         <div style={{

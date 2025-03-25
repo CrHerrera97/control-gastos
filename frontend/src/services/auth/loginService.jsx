@@ -13,6 +13,6 @@ export const fetchUser = async (correo, password)=>{
         headers,
         body: JSON.stringify({ correo, password })
     })
-    if(!response.ok) throw new Error('Error al obtener los gastos');
+    if(!response.ok) throw new Error('Usuario o contraseña incorrecta');
     return await response.json()
 }

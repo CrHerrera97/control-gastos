@@ -19,7 +19,7 @@ const useLogin = () =>{
 
     }
 
-    return { entrar, respuesta, error }
+    return { entrar, respuesta, error, setError }
 }
 
 export default useLogin;
