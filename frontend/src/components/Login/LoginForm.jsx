@@ -111,7 +111,7 @@ const LoginForm = () => {
                             fontSize: '1rem'
                         }}
                     >
-                        Login
+                        Entrar
                     </button>
                 </form>
             </div>
