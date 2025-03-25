@@ -4,7 +4,8 @@ const url = import.meta.env.VITE_API_URL;
 const port = import.meta.env.VITE_PORT;
 
 // La idea es que se consuma a través de un localstorage
-const tokenProvi = import.meta.env.VITE_TOKEN_PROVI;
+//const tokenProvi = import.meta.env.VITE_TOKEN_PROVI;
+const tokenProvi =  localStorage.getItem('x-token')
 
 const headers = {
     "Content-Type": "application/json",

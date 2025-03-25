@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import IngresoList from "./IngresoList";
 import DashBoard from "./DashBoard";
@@ -9,13 +9,15 @@ import LoginForm from "./Login/LoginForm";
 import MyNavbar from './navbar';
 
 const AppRoutes = () => {
-  const isLoginRoute = window.location.pathname === "/login";
+  const location = useLocation();
+  const hideNavbarRoutes = ["/login"];
+  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   return (
     <>
-      {!isLoginRoute && <MyNavbar />}
+      {shouldShowNavbar && <MyNavbar />}
       <Routes>
-        <Route path="login" element={<div>
+        <Route path="/login" element={<div>
           <LoginForm/>
         </div>}/>
         <Route path="/" element={<div>
@@ -34,7 +36,7 @@ const AppRoutes = () => {
   );
 };
 
-const ProtegerRutas = ({children}) =>{
+const ProtegerRutas = ({children}) => {
   const token = localStorage.getItem('x-token');
   return token ? children : <Navigate to="/login" />;
 }

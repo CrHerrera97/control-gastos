@@ -87,7 +87,8 @@ const IngresoList = () => {
   
   const handleCloseDelete = () => setModalEliminar(false);
 
-  const tokenProvi = import.meta.env.VITE_TOKEN_PROVI;
+  //const tokenProvi = import.meta.env.VITE_TOKEN_PROVI;
+  const tokenProvi = localStorage.getItem('x-token')
   // Headers para peticiones
 
   const headers = {
