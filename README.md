@@ -5,13 +5,13 @@ Aplicación web para gestionar los ingresos y gastos de un hogar, con la posibil
 ## 🎬 Vista previa
 
 ### Dashboard de reportes
-<img src="backend/public/reportes.gif" width="300" />
+<img src="backend/public/reportes.gif" width="250" />
 
 ### CRUD de ingresos
-<img src="./assets/crud-ingresos.gif" width="300" />
+<img src="backend/public/ingresos.gif" width="250" />
 
 ### CRUD de gastos
-<img src="./assets/crud-gastos.gif" width="300" />
+<img src="backend/public/gastos.gif" width="250" />
 
 ## ⚙️ Tecnologías utilizadas
 
