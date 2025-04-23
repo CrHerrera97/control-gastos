@@ -29,4 +29,5 @@ Aplicación web para gestionar los ingresos y gastos de un hogar, con la posibil
 1. Clona este repositorio:
 
 ```bash
-git clone https://github.com/tuusuario/control-de-gastos.git
+git clone https://github.com/CrHerrera97/control-gastos.git
+
